@@ -12,7 +12,7 @@ RM = rm -f
 all:			$(NAME)
 
 $(NAME):		$(OBJS)
-				$(CC) $(SRCS) includes/minilibx-linux/libmlx.a -lXext -lX11 -o $(NAME)
+				$(CC) $(SRCS) includes/minilibx-linux/libmlx.a -lXext -lX11 -lm -o $(NAME)
 				
 clean:
 			$(RM) $(OBJS)
