@@ -12,8 +12,8 @@
 
 #define ESCAPE 65307
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_LENGTH 512
+#define SCREEN_WIDTH 1280
+#define SCREEN_LENGTH 720
 #define BACKGROUND 0x8c8e8a
 #define PLAYER 0x0f056b
 #define WALL 0xffffff
@@ -32,11 +32,15 @@ typedef struct	s_data {
 }		t_data;
 
 typedef struct s_map {
+	void	*mlx;
+	void	*win;
 	int *map;
 	int width;
 	int length;
 	int unit;
+	t_data img;
 }		t_map;
+
 typedef struct s_game
 {
 	void	*mlx;

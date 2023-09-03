@@ -13,22 +13,22 @@ float	dist(float ax, float ay, float bx, float by, float ang)
 	return (sqrt(((bx-ax) * (bx-ax)) + ((by-ay) * (by-ay))));
 }
 
-void	gray_screen(t_game *game, t_data *img)
+void	gray_screen(t_data *img, int width, int length)
 {
 	int x;
 	int y;
 
-	x = 1;
-	y = 1;
-	while (x <= SCREEN_WIDTH)
+	x = 0;
+	y = 0;
+	while (x <= width)
 	{
-		while(y <= SCREEN_LENGTH)
+		while(y <= length)
 		{
 			my_mlx_pixel_put(img, x, y, BACKGROUND);
 			y++;
 		}
 		x++;
-		y = 1;
+		y = 0;
 	}
 }
 
@@ -43,7 +43,7 @@ void	aff_screen(t_game *game, t_data *img, int code, int size)
 	{
 		while(count_x != size)
 		{
-			my_mlx_pixel_put(img, (game->p_x * game->map.unit) + count_x, (game->p_y * game->map.unit) + count_y, code);
+			my_mlx_pixel_put(img, (game->p_x * 16) + count_x, (game->p_y * 16) + count_y, code);
 			count_x++;
 		}
 		count_y++;
@@ -51,25 +51,25 @@ void	aff_screen(t_game *game, t_data *img, int code, int size)
 	}
 }
 
-void	go_wall(t_game *game, int x, int y, t_data *img)
+void	go_wall(int x, int y, t_data *img)
 {
 	int count_x;
 	int count_y;
 
 	count_y = 0;
 	count_x = 0;
-	while(count_y != game->map.unit)
+	while(count_y != 16)
 	{
-		while(count_x != game->map.unit)
+		while(count_x != 16)
 		{
-			my_mlx_pixel_put(img, (x * game->map.unit) + count_x, (y * game->map.unit) + count_y, WALL);
+			my_mlx_pixel_put(img, (x * 16) + count_x, (y * 16) + count_y, WALL);
 			count_x++;
 		}
 		count_y++;
 		count_x = 0;
 	}
 }
-
+/*
 void	do_line(t_game *game, t_data *img, int code)
 {
 	int count_x;
@@ -88,17 +88,16 @@ void	do_line(t_game *game, t_data *img, int code)
 		count_y++;
 		count_x = 0;
 	}
-}
+}*/
 
 void	go_player(t_game *game, int x, int y, t_data *img)
 {
-	game->p_x = (float)x + 0.50;
-	game->p_y = (float)y + 0.50;
+	game->p_x = (float)x + 0.45;
+	game->p_y = (float)y + 0.45;
 	game->p_a = PI/2;
 	game->p_dx = cos(game->p_a) * 5;
 	game->p_dy = sin(game->p_a) * 5;
-	aff_screen(game, img, PLAYER, 5);
-	do_line(game, img, PLAYER);
+	aff_screen(game, img, PLAYER, 2);
 }
 
 void	put_map(t_game *game, t_data *img)
@@ -113,7 +112,7 @@ void	put_map(t_game *game, t_data *img)
 		while(x < game->map.width)
 		{
 			if (game->map.map[x + y * game->map.width] == 1)
-				go_wall(game, x, y, img);
+				go_wall(x, y, img);
 			x++;
 		}
 		y++;
@@ -157,9 +156,9 @@ void	do_ray(t_game *game, t_data *img)
 	float ca;
 	int i = 0;
 	int z = 0;
-	int pixel_count = 1;
+	int pixel_count = 0;
 	r = 0;
-	while (r<60)
+	while (r<1280)
 	{
 		dof = 0;
 		disH = 1000000;
@@ -262,27 +261,27 @@ void	do_ray(t_game *game, t_data *img)
 			ry = hy;
 			disT = disH;
 		}
-		if (((rx < 0 || rx > game->map.width * game->map.unit) && (ry < 0 || ry > game->map.length * game->map.unit)))
-			return ;
-		my_mlx_pixel_put(img, rx, ry, 0xFF0000);
-		my_mlx_pixel_put(img, rx+1, ry, 0xFF0000);
-		my_mlx_pixel_put(img, rx+1, ry+1, 0xFF0000);
-		my_mlx_pixel_put(img, rx, ry+1, 0xFF0000);
+		// if (((rx < 0 || rx > game->map.width * game->map.unit) && (ry < 0 || ry > game->map.length * game->map.unit)))
+		// 	return ;
+		// my_mlx_pixel_put(img, rx, ry, 0xFF0000);
+		// my_mlx_pixel_put(img, rx+1, ry, 0xFF0000);
+		// my_mlx_pixel_put(img, rx+1, ry+1, 0xFF0000);
+		// my_mlx_pixel_put(img, rx, ry+1, 0xFF0000);
 		ca = game->p_a - ra;
 		if (ca < 0)
 			ca += 2 * PI;
 		if (ca > 2 * PI)
 			ca-= 2 * PI;
 		disT = disT * cos(ca);
-		lineH = (game->map.unit * 320) / disT;
-		if (lineH > 320)
-			lineH = 320;
-		lineO = 160 - lineH / 2;
-		while (i < 8)
+		lineH = (game->map.unit * 720) / disT;
+		if (lineH > 720)
+			lineH = 720;
+		lineO = 360 - lineH / 2;
+		while (i < 1)
 		{
 			while (z < lineH)
 			{
-				my_mlx_pixel_put(img, pixel_count + 520, z + lineO, 0xFF0000);
+				my_mlx_pixel_put(img, pixel_count, z + lineO, 0xFF0000);
 				z++;
 			}
 			pixel_count++;
@@ -290,7 +289,7 @@ void	do_ray(t_game *game, t_data *img)
 			i++;
 		}
 		i = 0; 		
-		ra += DR;
+		ra += DR / 21.333333333;
 		if (ra < 0)
 			ra += 2 * PI;
 		if(ra > 2 * PI)
@@ -298,68 +297,59 @@ void	do_ray(t_game *game, t_data *img)
 	}
 }
 
-void	go_up(t_game *game, t_data *img)
+void	go_up(t_game *game, t_data *img, t_data *img_map)
 {
-	gray_screen(game, img);
-	do_line(game, img, BACKGROUND);
-	aff_screen(game, img, BACKGROUND, 5);
-	put_map(game, &game->img);
+	gray_screen(&game->img, SCREEN_WIDTH, SCREEN_LENGTH);
+	aff_screen(game, img_map, BACKGROUND, 2);
+	put_map(game, img_map);
 	if (game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 1)
 	{	
 		game->p_x += game->p_dx / game->map.unit;
 		game->p_y += game->p_dy / game->map.unit;
 	}
-	printf("%f, %f, %d\n", game->p_x, game->p_y, game->map.map[(int)game->p_x + (int)game->p_y * 8]);
-	aff_screen(game, img, PLAYER, 5);
-	do_line(game, img, PLAYER);
+	aff_screen(game, img_map, PLAYER, 2);
 	do_ray(game, img);
+	mlx_put_image_to_window(game->map.mlx, game->map.win, game->map.img.img, 0, 0);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
 
-void	go_left(t_game *game, t_data *img)
+void	go_left(t_game *game, t_data *img, t_data *img_map)
 {
-	gray_screen(game, img);
-	do_line(game, img, BACKGROUND);
-	put_map(game, &game->img);
+	gray_screen(&game->img, SCREEN_WIDTH, SCREEN_LENGTH);
 	game->p_a -= 0.1;
 	if (game->p_a < 0)
 		game->p_a += 2 * PI;
 	game->p_dx = cos(game->p_a) * 5;
 	game->p_dy = sin(game->p_a) * 5;
-	do_line(game, img, PLAYER);
 	do_ray(game, img);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
 
-void	go_right(t_game *game, t_data *img)
+void	go_right(t_game *game, t_data *img, t_data *img_map)
 {
-	gray_screen(game, img);
-	do_line(game, img, BACKGROUND);
-	put_map(game, &game->img);
+	gray_screen(&game->img, SCREEN_WIDTH, SCREEN_LENGTH);
 	game->p_a += 0.1;
 	if (game->p_a > 2 * PI)
 		game->p_a -= 2 * PI;
 	game->p_dx = cos(game->p_a) * 5;
 	game->p_dy = sin(game->p_a) * 5;
-	do_line(game, img, PLAYER);
 	do_ray(game, img);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
 
-void	go_down(t_game *game,   t_data *img)
+void	go_down(t_game *game,   t_data *img, t_data *img_map)
 {
-	gray_screen(game, img);
-	do_line(game, img, BACKGROUND);
-	aff_screen(game, img, BACKGROUND, 5);
-	put_map(game, &game->img);
+	gray_screen(&game->img, SCREEN_WIDTH, SCREEN_LENGTH);
+	aff_screen(game, img_map, BACKGROUND, 2);
+	put_map(game, img_map);
 	if (game->map.map[(int)(game->p_x - game->p_dx / game->map.unit) + (int)(game->p_y - game->p_dy / game->map.unit) * game->map.width] != 1)
 	{	
 		game->p_x -= game->p_dx / game->map.unit;
 		game->p_y -= game->p_dy / game->map.unit;
 	}
-	aff_screen(game, img, PLAYER, 5);
-	do_line(game, img, PLAYER);
+	aff_screen(game, img_map, PLAYER, 2);
 	do_ray(game, img);
+	mlx_put_image_to_window(game->map.mlx, game->map.win, game->map.img.img, 0, 0);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
 
@@ -369,13 +359,13 @@ int	code_moove(int keycode, void *gm)
 
 	game = (t_game *)gm;
 	if (keycode == 119)
-		go_up(game, &game->img);
+		go_up(game, &game->img, &game->map.img);
 	else if (keycode == 100)
-		go_right(game, &game->img);
+		go_right(game, &game->img, &game->map.img);
 	else if (keycode == 97)
-		go_left(game, &game->img);
+		go_left(game, &game->img, &game->map.img);
 	else if (keycode == 115)
-		go_down(game, &game->img);
+		go_down(game, &game->img, &game->map.img);
 	else if (keycode == ESCAPE)
 		esc_exit(keycode, game);
 }
@@ -384,9 +374,14 @@ void	game_start(t_game *game)
 {
 	game->img.img = mlx_new_image(game->mlx,SCREEN_WIDTH, SCREEN_LENGTH);
 	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bits_per_pixel, &game->img.line_length, &game->img.endian);
-	gray_screen(game, &game->img);
-	put_map(game, &game->img);
-	put_player(game, &game->img);
+	game->map.img.img = mlx_new_image(game->map.mlx, game->map.width * 16, game->map.width * 16);
+	game->map.img.addr = mlx_get_data_addr(game->map.img.img, &game->map.img.bits_per_pixel, &game->map.img.line_length, &game->map.img.endian);
+	gray_screen(&game->img, SCREEN_WIDTH, SCREEN_LENGTH);
+	gray_screen(&game->map.img, game->map.width * 16, game->map.length * 16);
+	put_map(game, &game->map.img);
+	put_player(game, &game->map.img);
+	do_ray(game, &game->img);
+	mlx_put_image_to_window(game->map.mlx, game->map.win, game->map.img.img, 0, 0);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	mlx_hook(game->win, 2, 1L << 0, code_moove, game);
 }
@@ -394,7 +389,9 @@ void	game_start(t_game *game)
 void	graphic_management(t_game *game)
 {
 	game->mlx = mlx_init();
+	game->map.mlx = mlx_init();
 	game->win = mlx_new_window(game->mlx, SCREEN_WIDTH, SCREEN_LENGTH, "cub3d");
+	game->map.win = mlx_new_window(game->map.mlx, game->map.width * 16, game->map.width * 16, "minimap");
 	mlx_key_hook(game->win, esc_exit, game);
 	mlx_hook(game->win, 17, 1L << 8, cross_exit, game);
 	game_start(game);
@@ -410,10 +407,10 @@ int	main(void)
 		1,1,1,1,1,1,1,1,
 		1,0,0,0,0,0,0,1,
 		1,0,2,0,1,0,0,1,
+		1,0,0,0,1,0,0,1,
 		1,0,0,0,0,0,0,1,
-		1,0,0,0,0,0,0,1,
-		1,0,0,0,1,1,1,1,
-		1,0,0,0,0,0,0,1,
+		1,0,1,0,1,1,1,1,
+		1,0,1,0,0,0,0,1,
 		1,1,1,1,1,1,1,1,
 	};
 	game.map.map = map;
