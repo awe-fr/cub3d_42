@@ -21,6 +21,7 @@
 #define PI 3.1415926535
 #define P2 PI/2
 #define P3 3*PI/2
+#define DR 0.0174533
 
 typedef struct	s_data {
 	void	*img;

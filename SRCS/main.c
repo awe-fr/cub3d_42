@@ -143,13 +143,23 @@ void	put_player(t_game *game, t_data *img)
 
 void	do_ray(t_game *game, t_data *img)
 {
-	int r,mx,my,mp,dof; float rx,ry,ra,xo,yo;
-	ra = game->p_a;
+	int r,mx,my,mp,dof; float rx,ry,ra,xo,yo,disT;
+	ra = game->p_a - DR * 30;
+	if (ra < 0)
+		ra += 2 * PI;
+	if(ra > 2 * PI)
+		ra -= 2 * PI;
 	float aTan;
 	float nTan;
 	float disH, disV, hx, vx, hy, vy;
+	float lineH;
+	float lineO;
+	float ca;
+	int i = 0;
+	int z = 0;
+	int pixel_count = 1;
 	r = 0;
-	while (r<1)
+	while (r<60)
 	{
 		dof = 0;
 		disH = 1000000;
@@ -244,11 +254,13 @@ void	do_ray(t_game *game, t_data *img)
 		{
 			rx = vx;
 			ry = vy;
+			disT = disV;
 		}
 		if(disH < disV)
 		{
 			rx = hx;
 			ry = hy;
+			disT = disH;
 		}
 		if (((rx < 0 || rx > game->map.width * game->map.unit) && (ry < 0 || ry > game->map.length * game->map.unit)))
 			return ;
@@ -256,17 +268,48 @@ void	do_ray(t_game *game, t_data *img)
 		my_mlx_pixel_put(img, rx+1, ry, 0xFF0000);
 		my_mlx_pixel_put(img, rx+1, ry+1, 0xFF0000);
 		my_mlx_pixel_put(img, rx, ry+1, 0xFF0000);
+		ca = game->p_a - ra;
+		if (ca < 0)
+			ca += 2 * PI;
+		if (ca > 2 * PI)
+			ca-= 2 * PI;
+		disT = disT * cos(ca);
+		lineH = (game->map.unit * 320) / disT;
+		if (lineH > 320)
+			lineH = 320;
+		lineO = 160 - lineH / 2;
+		while (i < 8)
+		{
+			while (z < lineH)
+			{
+				my_mlx_pixel_put(img, pixel_count + 520, z + lineO, 0xFF0000);
+				z++;
+			}
+			pixel_count++;
+			z = 0;
+			i++;
+		}
+		i = 0; 		
+		ra += DR;
+		if (ra < 0)
+			ra += 2 * PI;
+		if(ra > 2 * PI)
+			ra -= 2 * PI;
 	}
 }
 
 void	go_up(t_game *game, t_data *img)
 {
+	gray_screen(game, img);
 	do_line(game, img, BACKGROUND);
 	aff_screen(game, img, BACKGROUND, 5);
 	put_map(game, &game->img);
-	game->p_x += game->p_dx / game->map.unit;
-	game->p_y += game->p_dy / game->map.unit;
-	//game->p_y -= 0.10;
+	if (game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 1)
+	{	
+		game->p_x += game->p_dx / game->map.unit;
+		game->p_y += game->p_dy / game->map.unit;
+	}
+	printf("%f, %f, %d\n", game->p_x, game->p_y, game->map.map[(int)game->p_x + (int)game->p_y * 8]);
 	aff_screen(game, img, PLAYER, 5);
 	do_line(game, img, PLAYER);
 	do_ray(game, img);
@@ -275,6 +318,7 @@ void	go_up(t_game *game, t_data *img)
 
 void	go_left(t_game *game, t_data *img)
 {
+	gray_screen(game, img);
 	do_line(game, img, BACKGROUND);
 	put_map(game, &game->img);
 	game->p_a -= 0.1;
@@ -289,6 +333,7 @@ void	go_left(t_game *game, t_data *img)
 
 void	go_right(t_game *game, t_data *img)
 {
+	gray_screen(game, img);
 	do_line(game, img, BACKGROUND);
 	put_map(game, &game->img);
 	game->p_a += 0.1;
@@ -303,12 +348,15 @@ void	go_right(t_game *game, t_data *img)
 
 void	go_down(t_game *game,   t_data *img)
 {
+	gray_screen(game, img);
 	do_line(game, img, BACKGROUND);
 	aff_screen(game, img, BACKGROUND, 5);
 	put_map(game, &game->img);
-	game->p_x -= game->p_dx / game->map.unit;
-	game->p_y -= game->p_dy / game->map.unit;
-	//game->p_y += 0.10;
+	if (game->map.map[(int)(game->p_x - game->p_dx / game->map.unit) + (int)(game->p_y - game->p_dy / game->map.unit) * game->map.width] != 1)
+	{	
+		game->p_x -= game->p_dx / game->map.unit;
+		game->p_y -= game->p_dy / game->map.unit;
+	}
 	aff_screen(game, img, PLAYER, 5);
 	do_line(game, img, PLAYER);
 	do_ray(game, img);
