@@ -158,7 +158,7 @@ void	do_ray(t_game *game, t_data *img)
 	int z = 0;
 	int pixel_count = 0;
 	r = 0;
-	while (r<1280)
+	while (r<SCREEN_WIDTH)
 	{
 		dof = 0;
 		disH = 1000000;
@@ -273,10 +273,10 @@ void	do_ray(t_game *game, t_data *img)
 		if (ca > 2 * PI)
 			ca-= 2 * PI;
 		disT = disT * cos(ca);
-		lineH = (game->map.unit * 720) / disT;
-		if (lineH > 720)
-			lineH = 720;
-		lineO = 360 - lineH / 2;
+		lineH = (game->map.unit * SCREEN_LENGTH) / disT;
+		if (lineH > SCREEN_LENGTH)
+			lineH = SCREEN_LENGTH;
+		lineO = (SCREEN_LENGTH / 2) - lineH / 2;
 		while (i < 1)
 		{
 			while (z < lineH)
@@ -289,7 +289,7 @@ void	do_ray(t_game *game, t_data *img)
 			i++;
 		}
 		i = 0; 		
-		ra += DR / 21.333333333;
+		ra += DR / (SCREEN_WIDTH / 60);
 		if (ra < 0)
 			ra += 2 * PI;
 		if(ra > 2 * PI)
@@ -370,6 +370,26 @@ int	code_moove(int keycode, void *gm)
 		esc_exit(keycode, game);
 }
 
+int	mouse_moove(int keycode, void *gm)
+{
+	t_game *game;
+
+	game = (t_game *)gm;
+	printf("keycode is %d\n", keycode);
+	//mlx_mouse_get_pos(game->mlx, game->win, game->mouse_x, game->mouse_y);
+	//if (get_)
+	/*if (keycode == 119)
+		go_up(game, &game->img, &game->map.img);
+	else if (keycode == 100)
+		go_right(game, &game->img, &game->map.img);
+	else if (keycode == 97)
+		go_left(game, &game->img, &game->map.img);
+	else if (keycode == 115)
+		go_down(game, &game->img, &game->map.img);
+	else if (keycode == ESCAPE)
+		esc_exit(keycode, game);*/
+}
+
 void	game_start(t_game *game)
 {
 	game->img.img = mlx_new_image(game->mlx,SCREEN_WIDTH, SCREEN_LENGTH);
@@ -381,9 +401,11 @@ void	game_start(t_game *game)
 	put_map(game, &game->map.img);
 	put_player(game, &game->map.img);
 	do_ray(game, &game->img);
+	//mlx_mouse_hide(game->mlx, game->win);
 	mlx_put_image_to_window(game->map.mlx, game->map.win, game->map.img.img, 0, 0);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	mlx_hook(game->win, 2, 1L << 0, code_moove, game);
+	mlx_hook(game->win, 6, 1L << 6, mouse_moove, game);
 }
 
 void	graphic_management(t_game *game)

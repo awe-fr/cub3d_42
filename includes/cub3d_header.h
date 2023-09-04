@@ -23,6 +23,9 @@
 #define P3 3*PI/2
 #define DR 0.0174533
 
+#define MOUSE_x SCREEN_WIDTH / 2
+#define MOUSE_y SCREEN_LENGTH / 2
+
 typedef struct	s_data {
 	void	*img;
 	char	*addr;
