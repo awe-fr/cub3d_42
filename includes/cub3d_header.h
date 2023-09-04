@@ -17,6 +17,8 @@
 #define BACKGROUND 0x8c8e8a
 #define PLAYER 0x0f056b
 #define WALL 0xffffff
+#define DOOR_OPEN 0x80e56a
+#define DOOR_CLOSE 0xdc1b1c
 
 #define PI 3.1415926535
 #define P2 PI/2
@@ -55,6 +57,7 @@ typedef struct s_game
 	float p_dx;
 	float p_dy;
 	float p_a;
+	float next_wall;
 	t_map map;
 	t_data img;
 }		t_game;
