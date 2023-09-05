@@ -200,8 +200,7 @@ void	do_ray(t_game *game, t_data *img)
 				disH = dist(game->p_x * 64, game->p_y * 64, hx, hy, ra);
 				dof = 8;
 			}
-			elseif ((game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 1) && (game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 7))
-	
+			else if ((game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 1) && (game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 7))
 			{
 				rx+=xo;
 				ry+=yo;
