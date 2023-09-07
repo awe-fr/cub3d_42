@@ -1,11 +1,11 @@
 #include "../includes/cub3d_header.h"
 
-void my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void my_mlx_pixel_put(t_data *data, int x, int y, int colors)
 {
 	char *dest;
 
 	dest = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dest = color;
+	*(unsigned int*)dest = colors;
 }
 
 float	dist(float ax, float ay, float bx, float by, float ang)
@@ -532,7 +532,7 @@ void	graphic_management(t_game *game)
 	mlx_loop(game->mlx);
 }
 
-void	atoi_for_xpm(char *str, t_game *game)
+void	atoi_for_xpm(char *str, t_xpm *xpm)
 {
 	int i;
 	int result;
@@ -541,75 +541,107 @@ void	atoi_for_xpm(char *str, t_game *game)
 	result = 0;
 	while (str[++i] != ' ')
 		result = result * 10 + (str[i] - 48);
-	game->wall.width = result;
+	xpm->width = result;
 	result = 0;
 	while (str[++i] != ' ')
 		result = result * 10 + (str[i] - 48);
-	game->wall.length = result;
+	xpm->length = result;
 	result = 0;
 	while (str[++i] != ' ')
 		result = result * 10 + (str[i] - 48);
-	game->wall.number_of_color = result;
+	xpm->colors_number = result;
 	result = 0;
 	while (str[++i] != '"')
 		result = result * 10 + (str[i] - 48);
-	game->wall.charactere_per_color = result;
+	xpm->charactere_per_color = result;
 }
 
-void	place_colors(char **xpm, t_game *game)
+void	place_colors(char **xpm_info, t_xpm *xpm)
 {
 	int x;
-	int y;
 	int i;
 	int z;
 
-	i = 0;
+	i = -1;
 	x = 0;
-	y = 3;
 	z = 1;
-	game->wall.colors = malloc(sizeof(char *) * (game->wall.number_of_color + 1));
-	while (y < game->wall.number_of_color + 3)
+	xpm->colors = malloc(sizeof(char *) * (xpm->colors_number + 1));
+	while (++i < xpm->colors_number)
 	{
-		game->wall.colors[i] = malloc(sizeof(char) * 11);
-		game->wall.colors[i][x] = xpm[y][z];
-		x++;
-		game->wall.colors[i][x] = ' ';
-		x++;
-		game->wall.colors[i][x] = '0';
-		x++;
-		game->wall.colors[i][x] = 'x';
-		x++;
-		while (xpm[y][z] != '#')
-			z++;
-		z++;
-		while (x < 11)
-		{
-			game->wall.colors[i][x] = xpm[y][z];
-			x++;
-			z++;
-		}
-		game->wall.colors[i][x] = '\0';
-		i++;
-		y++;
+		xpm->colors[i] = malloc(sizeof(char) * 11);
+		xpm->colors[i][x++] = xpm_info[i + 3][z++];
+		xpm->colors[i][x++] = ' ';
+		xpm->colors[i][x++] = '0';
+		xpm->colors[i][x++] = 'x';
+		while (xpm_info[i + 3][z++] != '#')
+		z += 2;
+		while (x < 10)
+			xpm->colors[i][x++] = xpm_info[i + 3][z++];
+		xpm->colors[i][x] = '\0';
+		z = 1;
+		x = 0;
 	}
-
+	xpm->colors[i] = 0;
 }
 
-void	assign(t_game *game, char **xpm)
+void	xpm_to_char(char **xpm_char, t_xpm *xpm)
+{
+	int y;
+	int x;
+	int i;
+
+	y = 3 + xpm->colors_number;
+	x = 1;
+	i = 0;
+	xpm->xpm = malloc(sizeof(char *) * (xpm->length + 1));
+	while (xpm_char[y])
+	{
+		xpm->xpm[i] = malloc(sizeof(char) * (xpm->width + 1));
+		while((x - 1) < xpm->width)
+		{
+			xpm->xpm[i][x - 1] = xpm_char[y][x];
+			x++;
+		}
+		xpm->xpm[i][x - 1] = '\0';
+		x = 1;
+		y++;
+		i++;
+	}
+	xpm->xpm[i] = 0;
+}
+
+void	assign(t_xpm *xpm_struct, char **xpm)
 {
 	int x;
 	int y;
 
 	y = 2;
 	x = 0;
-	atoi_for_xpm(xpm[2], game);
-	place_colors(xpm, game);
+	atoi_for_xpm(xpm[2], xpm_struct);
+	place_colors(xpm, xpm_struct);
+	xpm_to_char(xpm, xpm_struct);
 }
 
 int	main(void)
 {
 	t_game	game;
+	t_xpm	wall;
+	t_xpm	door;
 
+	int walltxt;
+	walltxt = open("./wall.xpm", O_RDONLY);
+	char **wall_xpm = ft_image_to_char(walltxt);
+	walltxt = close(walltxt);
+	assign(&wall, wall_xpm);
+	int doortxt;
+	doortxt = open("./door.xpm", O_RDONLY);
+	char **door_xpm = ft_image_to_char(doortxt);
+	doortxt = close(doortxt);
+	assign(&door, door_xpm);
+	game.wall = wall;
+	game.door = door;
+	free_tab(wall_xpm);
+	free_tab(door_xpm);
 	int map[] =
 	{
 		1,1,1,1,1,1,1,1,
@@ -621,19 +653,10 @@ int	main(void)
 		1,0,1,0,0,0,0,1,
 		1,1,1,1,1,1,1,1,
 	};
-	int walltxt;
-	walltxt = open("./wall.xpm", O_RDONLY);
-	char **wall = ft_image_to_char(walltxt);
-	walltxt = close(walltxt);
-	assign(&game, wall);
-	for(int i = 0; wall[i]; i++) {printf("%s\n", wall[i]);}
-	printf("%d, ", game.wall.width);
-	printf("%d, ", game.wall.length);
-	printf("%d, ", game.wall.number_of_color);
-	printf("%d, ", game.wall.charactere_per_color);
-	// game.map.map = map;
-	// game.map.width = 8;
-	// game.map.length = 8;
-	// game.map.unit = 64;
-	// graphic_management(&game);
+
+	game.map.map = map;
+	game.map.width = 8;
+	game.map.length = 8;
+	game.map.unit = 64;
+	graphic_management(&game);
 }

@@ -33,7 +33,7 @@ typedef struct s_xpm {
 	char **colors;
 	int width;
 	int length;
-	int number_of_color;
+	int colors_number;
 	int charactere_per_color;
 }		t_xpm;
 
@@ -76,6 +76,7 @@ typedef struct s_game
 int	esc_exit(int keycode, t_game *game);
 int	cross_exit(t_game *game);
 void	free_graphics(t_game *game);
+void	free_tab(char **tab);
 size_t	ft_strlen(char *str);
 char	*ft_strchr(char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);

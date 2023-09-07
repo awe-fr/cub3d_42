@@ -19,7 +19,7 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS)
 				$(MLX_COMPILE)
-				$(CC) $(SRCS) $(MLX) $(CFLAGS_MLX) $(NAME) -g -fsanitize=address
+				$(CC) $(SRCS) $(MLX) $(CFLAGS_MLX) $(NAME) -g
 				
 clean:
 			$(RM) $(OBJS)
