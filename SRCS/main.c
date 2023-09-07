@@ -532,6 +532,80 @@ void	graphic_management(t_game *game)
 	mlx_loop(game->mlx);
 }
 
+void	atoi_for_xpm(char *str, t_game *game)
+{
+	int i;
+	int result;
+	
+	i = 0;
+	result = 0;
+	while (str[++i] != ' ')
+		result = result * 10 + (str[i] - 48);
+	game->wall.width = result;
+	result = 0;
+	while (str[++i] != ' ')
+		result = result * 10 + (str[i] - 48);
+	game->wall.length = result;
+	result = 0;
+	while (str[++i] != ' ')
+		result = result * 10 + (str[i] - 48);
+	game->wall.number_of_color = result;
+	result = 0;
+	while (str[++i] != '"')
+		result = result * 10 + (str[i] - 48);
+	game->wall.charactere_per_color = result;
+}
+
+void	place_colors(char **xpm, t_game *game)
+{
+	int x;
+	int y;
+	int i;
+	int z;
+
+	i = 0;
+	x = 0;
+	y = 3;
+	z = 1;
+	game->wall.colors = malloc(sizeof(char *) * (game->wall.number_of_color + 1));
+	while (y < game->wall.number_of_color + 3)
+	{
+		game->wall.colors[i] = malloc(sizeof(char) * 11);
+		game->wall.colors[i][x] = xpm[y][z];
+		x++;
+		game->wall.colors[i][x] = ' ';
+		x++;
+		game->wall.colors[i][x] = '0';
+		x++;
+		game->wall.colors[i][x] = 'x';
+		x++;
+		while (xpm[y][z] != '#')
+			z++;
+		z++;
+		while (x < 11)
+		{
+			game->wall.colors[i][x] = xpm[y][z];
+			x++;
+			z++;
+		}
+		game->wall.colors[i][x] = '\0';
+		i++;
+		y++;
+	}
+
+}
+
+void	assign(t_game *game, char **xpm)
+{
+	int x;
+	int y;
+
+	y = 2;
+	x = 0;
+	atoi_for_xpm(xpm[2], game);
+	place_colors(xpm, game);
+}
+
 int	main(void)
 {
 	t_game	game;
@@ -547,9 +621,19 @@ int	main(void)
 		1,0,1,0,0,0,0,1,
 		1,1,1,1,1,1,1,1,
 	};
-	game.map.map = map;
-	game.map.width = 8;
-	game.map.length = 8;
-	game.map.unit = 64;
-	graphic_management(&game);
+	int walltxt;
+	walltxt = open("./wall.xpm", O_RDONLY);
+	char **wall = ft_image_to_char(walltxt);
+	walltxt = close(walltxt);
+	assign(&game, wall);
+	for(int i = 0; wall[i]; i++) {printf("%s\n", wall[i]);}
+	printf("%d, ", game.wall.width);
+	printf("%d, ", game.wall.length);
+	printf("%d, ", game.wall.number_of_color);
+	printf("%d, ", game.wall.charactere_per_color);
+	// game.map.map = map;
+	// game.map.width = 8;
+	// game.map.length = 8;
+	// game.map.unit = 64;
+	// graphic_management(&game);
 }

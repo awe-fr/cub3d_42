@@ -28,6 +28,15 @@
 #define MOUSE_X SCREEN_WIDTH / 2
 #define MOUSE_Y SCREEN_LENGTH / 2
 
+typedef struct s_xpm {
+	char **xpm;
+	char **colors;
+	int width;
+	int length;
+	int number_of_color;
+	int charactere_per_color;
+}		t_xpm;
+
 typedef struct	s_data {
 	void	*img;
 	char	*addr;
@@ -58,6 +67,8 @@ typedef struct s_game
 	float p_dy;
 	float p_a;
 	float next_wall;
+	t_xpm wall;
+	t_xpm door;
 	t_map map;
 	t_data img;
 }		t_game;
@@ -65,5 +76,10 @@ typedef struct s_game
 int	esc_exit(int keycode, t_game *game);
 int	cross_exit(t_game *game);
 void	free_graphics(t_game *game);
+size_t	ft_strlen(char *str);
+char	*ft_strchr(char *str, int c);
+char	*ft_strjoin(char *s1, char *s2);
+char	**ft_image_to_char(int map);
+char	*get_flat(int map);
 
 #endif

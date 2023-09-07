@@ -7,7 +7,7 @@ OBJS = $(SRCS:.c=.o)
 CC = gcc
 
 CFLAGS_MLX = -lXext -lX11 -lm -o
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra 
 RM = rm -f
 
 MLX_PATH  = includes/minilibx-linux/
@@ -19,7 +19,7 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS)
 				$(MLX_COMPILE)
-				$(CC) $(SRCS) $(MLX) $(CFLAGS_MLX) $(NAME)
+				$(CC) $(SRCS) $(MLX) $(CFLAGS_MLX) $(NAME) -g -fsanitize=address
 				
 clean:
 			$(RM) $(OBJS)
