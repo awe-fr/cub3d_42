@@ -1,4 +1,4 @@
-#include "../includes/cub3d_header.h"
+#include "../../includes/cub3d_header.h"
 	
 void	free_tab(char **tab)
 {

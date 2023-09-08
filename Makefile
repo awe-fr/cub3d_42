@@ -1,6 +1,10 @@
 NAME = cub3d
 
-SRCS = SRCS/*.c
+SRCS = SRCS/*.c\
+	   SRCS/parsing/*.c\
+	   SRCS/exit/*.c\
+	   SRCS/game/*.c
+
 
 OBJS = $(SRCS:.c=.o)
 

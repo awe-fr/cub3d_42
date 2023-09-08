@@ -1,4 +1,4 @@
-#include "../includes/cub3d_header.h"
+#include "../../includes/cub3d_header.h"
 
 int	esc_exit(int keycode, t_game *game)
 {
