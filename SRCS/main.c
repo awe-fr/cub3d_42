@@ -26,6 +26,8 @@ void	do_ray(t_game *game, t_data *img)
 	float ca;
 	int z = 0;
 	int pixel_count = 0;
+	float were_f;
+	int were;
 	r = 0;
 	while (r<SCREEN_WIDTH)
 	{
@@ -66,7 +68,7 @@ void	do_ray(t_game *game, t_data *img)
 				disH = dist(game->p_x * 64, game->p_y * 64, hx, hy);
 				dof = 8;
 			}
-			else if ((game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 1) && (game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 7))
+			else if ((game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 1) || (game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 7))
 			{
 				rx+=xo;
 				ry+=yo;
@@ -136,18 +138,23 @@ void	do_ray(t_game *game, t_data *img)
 		if (ca > 2 * PI)
 			ca-= 2 * PI;
 		disT = disT * cos(ca);
+		were_f = (game->p_y + sin(ra) * (disT/64)) - (int)(game->p_y + sin(ra) * (disT/64));
+		were = (int)(were_f * 64);
 		if (r == SCREEN_WIDTH / 2)
 		{
 			game->next_wall = disT / 64;
-			//printf("%f, %f, %f\n", disT / 64, cos(ca), game->p_a / PI);
+			// printf("%f, %f, %d\n", were_f, game->p_x + cos(ra) * disT/64, (int)(game->p_x + cos(ra) * disT/64));
 		}
 		lineH = (game->map.unit * SCREEN_LENGTH) / disT;
 		if (lineH > SCREEN_LENGTH)
 			lineH = SCREEN_LENGTH;
 		lineO = (SCREEN_LENGTH / 2) - lineH / 2;
+		if (r == SCREEN_WIDTH / 2)
+			printf("%d\n", (int)(lineH * 64) / 720);
 		while (z < lineH)
 		{
-			my_mlx_pixel_put(img, pixel_count, z + lineO, 0xFF0000);
+			if (were >= 0 && were <=  63)
+				my_mlx_pixel_put(img, pixel_count, z + lineO, game->wall.xpm[(z * 64) / 720][were]);
 			z++;
 		}
 		pixel_count++;
@@ -158,6 +165,50 @@ void	do_ray(t_game *game, t_data *img)
 		if(ra > 2 * PI)
 			ra -= 2 * PI;
 	}
+}
+
+int atoi_hexa(char *str)
+{
+	int result;
+	int i;
+
+	result = 0;
+	i = 0;
+	while ((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'A' && str[i] <= 'F'))
+	{
+		if (str[i] >= 'A' && str[i] <= 'F')
+			result += ((str[i] - 55) * pow(16, ft_strlen(str) - i - 1));
+		else
+			result += ((str[i] - 48) * pow(16, ft_strlen(str) - i - 1));
+		i++;
+	}
+	return (result);
+}
+
+int	get_color(t_xpm *xpm, char **xpm_char, int x, int y)
+{
+	char val;
+	int i;
+	int z;
+	int result;
+	char *color;
+	int k;
+
+	i = 0;
+	z = 4;
+	k = 0;
+	val = xpm_char[y][x];
+	color = malloc(sizeof(char) * 7);
+	while ((xpm->colors[i][0] != val) && (xpm->colors[i] != NULL))
+		i++;
+	while (xpm->colors[i][z] != 0)
+	{
+		color[k++] = xpm->colors[i][z++];
+	}
+	result = atoi_hexa(color);
+	free(color);
+	//printf("%d\n", result);
+	return result;
 }
 
 void	game_start(t_game *game)

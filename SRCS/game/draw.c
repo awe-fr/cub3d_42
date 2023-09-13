@@ -11,7 +11,7 @@ void	gray_screen(t_data *img, int width, int length)
 	{
 		while(y <= length)
 		{
-			my_mlx_pixel_put(img, x, y, BACKGROUND);
+			my_mlx_pixel_put(img, x, y, 9211530);
 			y++;
 		}
 		x++;

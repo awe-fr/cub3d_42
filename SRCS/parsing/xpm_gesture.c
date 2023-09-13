@@ -78,11 +78,34 @@ void	xpm_to_char(char **xpm_char, t_xpm *xpm)
 	xpm->xpm[i] = 0;
 }
 
+void	xpm_to_int(char **xpm_char, t_xpm *xpm)
+{
+	int y;
+	int x;
+	int i;
+
+	y = 3 + xpm->colors_number;
+	x = 1;
+	i = 0;
+	xpm->xpm = malloc(sizeof(int *) * (xpm->length));
+	while(xpm_char[y + i])
+	{
+		xpm->xpm[i] = malloc(sizeof(int) * (xpm->width));
+		while((x - 1) < xpm->width)
+		{
+			xpm->xpm[i][x - 1] = get_color(xpm, xpm_char, x, y + i);
+			x++;
+		}
+		x = 1;
+		i++;			
+	}
+}
+
 void	assign(t_xpm *xpm_struct, char **xpm)
 {
 	atoi_for_xpm(xpm[2], xpm_struct);
 	place_colors(xpm, xpm_struct);
-	xpm_to_char(xpm, xpm_struct);
+	xpm_to_int(xpm, xpm_struct);
 }
 
 void	init_assign(t_game *game)
@@ -104,4 +127,11 @@ void	init_assign(t_game *game)
 	game->door = door;
 	free_tab(wall_xpm);
 	free_tab(door_xpm);
+	// for(int i = 0; i < 64; i++){
+	// 	for(int y = 0; y < 64; y++){
+	// 		printf("%d , ", wall.xpm[i][y]); y++;
+	// 	} 
+	// 	printf("\n");
+	// 	i++;
+	// }
 }

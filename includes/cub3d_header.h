@@ -29,8 +29,8 @@
 #define MOUSE_Y SCREEN_LENGTH / 2
 
 typedef struct s_xpm {
-	char **xpm;
 	char **colors;
+	int **xpm;
 	int width;
 	int length;
 	int colors_number;
@@ -77,6 +77,7 @@ int	esc_exit(int keycode, t_game *game);
 int	cross_exit(t_game *game);
 void	free_graphics(t_game *game);
 void	free_tab(char **tab);
+void	free_xpm(int **tab, int x);
 size_t	ft_strlen(char *str);
 char	*ft_strchr(char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);
@@ -114,5 +115,7 @@ void	go_player(t_game *game, int x, int y, t_data *img);
 void	do_ray(t_game *game, t_data *img);
 void	game_start(t_game *game);
 void	graphic_management(t_game *game);
+int	get_color(t_xpm *xpm, char **xpm_char, int x, int y);
+int atoi_hexa(char *str);
 
 #endif
