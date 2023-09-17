@@ -33,9 +33,15 @@ void	free_graphics(t_game *game)
 	mlx_destroy_window(game->map.mlx, game->map.win);
 	mlx_destroy_display(game->map.mlx);
 	free(game->map.mlx);
-	free_xpm(game->wall.xpm, game->wall.length);
-	free_tab(game->wall.colors);
-	free_xpm(game->door.xpm, game->door.length);
-	free_tab(game->door.colors);
+	free_xpm(game->north.xpm, game->north.length);
+	free_tab(game->north.colors);
+	free_xpm(game->south.xpm, game->south.length);
+	free_tab(game->south.colors);
+	free_xpm(game->east.xpm, game->east.length);
+	free_tab(game->east.colors);
+	free_xpm(game->west.xpm, game->west.length);
+	free_tab(game->west.colors);
+	// free_xpm(game->door.xpm, game->door.length);
+	// free_tab(game->door.colors);
 	exit (0);
 }

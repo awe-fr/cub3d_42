@@ -37,6 +37,21 @@ typedef struct s_xpm {
 	int charactere_per_color;
 }		t_xpm;
 
+typedef	struct s_tmp {
+	t_xpm	north;
+	t_xpm	south;
+	t_xpm	east;
+	t_xpm	west;
+	int northtxt;
+	int southtxt;
+	int easttxt;
+	int westtxt;
+	char **north_xpm;
+	char **south_xpm;
+	char **east_xpm;
+	char **west_xpm;
+}		t_tmp;
+
 typedef struct	s_data {
 	void	*img;
 	char	*addr;
@@ -66,9 +81,10 @@ typedef struct s_game
 	float p_dx;
 	float p_dy;
 	float p_a;
-	float next_wall;
-	t_xpm wall;
-	t_xpm door;
+	t_xpm north;
+	t_xpm south;
+	t_xpm east;
+	t_xpm west;
 	t_map map;
 	t_data img;
 }		t_game;
@@ -78,6 +94,7 @@ int	cross_exit(t_game *game);
 void	free_graphics(t_game *game);
 void	free_tab(char **tab);
 void	free_xpm(int **tab, int x);
+void	free_tmp_value(t_tmp *tmp);
 size_t	ft_strlen(char *str);
 char	*ft_strchr(char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);
@@ -86,7 +103,6 @@ char	**st_split(char *s, char c);
 char	**ft_split(char *s, char c);
 char	**ft_image_to_char(int map);
 char	*get_flat(int map);
-void	assign(t_xpm *xpm_struct, char **xpm);
 void	xpm_to_char(char **xpm_char, t_xpm *xpm);
 void	place_colors(char **xpm_info, t_xpm *xpm);
 void	atoi_for_xpm(char *str, t_xpm *xpm);
@@ -117,5 +133,7 @@ void	game_start(t_game *game);
 void	graphic_management(t_game *game);
 int	get_color(t_xpm *xpm, char **xpm_char, int x, int y);
 int atoi_hexa(char *str);
+void	check_color(t_tmp *tmp);
+void	check_square(t_tmp *tmp);
 
 #endif
