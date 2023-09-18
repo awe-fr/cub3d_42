@@ -41,6 +41,7 @@ void	free_graphics(t_game *game)
 	free_tab(game->east.colors);
 	free_xpm(game->west.xpm, game->west.length);
 	free_tab(game->west.colors);
+	free_xpm(game->screen, SCREEN_LENGTH);
 	// free_xpm(game->door.xpm, game->door.length);
 	// free_tab(game->door.colors);
 	exit (0);

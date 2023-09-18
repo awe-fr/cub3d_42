@@ -74,6 +74,7 @@ typedef struct s_game
 {
 	void	*mlx;
 	void	*win;
+	int **screen;
 	int spawn_x;
 	int spawn_y;
 	float p_x;
@@ -135,5 +136,7 @@ int	get_color(t_xpm *xpm, char **xpm_char, int x, int y);
 int atoi_hexa(char *str);
 void	check_color(t_tmp *tmp);
 void	check_square(t_tmp *tmp);
+void	screen_alloc(t_game *game);
+void	tab_to_image(t_game *game, t_data *img);
 
 #endif
