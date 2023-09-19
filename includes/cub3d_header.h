@@ -104,48 +104,53 @@ typedef struct s_game
 
 /**********xpm_parsing**********/
 
-int		get_color(t_xpm *xpm, char **xpm_char, int x, int y);
-int		atoi_hexa(char *str);
+char	**ft_image_to_char(int map);
+char	*get_flat(int map);
+char	*cut_line(char *buff);
+char	*get_line(int xpm, char *buff);
+void	tab_in_xpm(t_tmp *tmp);
 void	check_color(t_tmp *tmp);
 void	check_square(t_tmp *tmp);
+void	init_assign(t_game *game);
+void	atoi_for_xpm(char *str, t_xpm *xpm);
+void	xpm_to_int(char **xpm_char, t_xpm *xpm);
 void	xpm_to_char(char **xpm_char, t_xpm *xpm);
 void	place_colors(char **xpm_info, t_xpm *xpm);
-void	atoi_for_xpm(char *str, t_xpm *xpm);
-void	init_assign(t_game *game);
-char	**ft_image_to_char(int map);
+int		atoi_hexa(char *str);
+int		get_color(t_xpm *xpm, char **xpm_char, int x, int y);
 
 /********game_essential********/
 
-int		esc_exit(int keycode, t_game *game);
-int		cross_exit(t_game *game);
 void	game_start(t_game *game);
-void	graphic_management(t_game *game);
 void	screen_alloc(t_game *game);
+void	graphic_management(t_game *game);
+int		cross_exit(t_game *game);
+int		esc_exit(int keycode, t_game *game);
 
 /**********interaction**********/
 
+void	look_left(t_game *game, t_data *img);
+void	look_right(t_game *game, t_data *img);
+void	go_up(t_game *game, t_data *img, t_data *img_map);
+void	go_left(t_game *game, t_data *img, t_data *img_map);
+void	go_down(t_game *game, t_data *img, t_data *img_map);
+void	go_right(t_game *game, t_data *img, t_data *img_map);
 void	open_east(t_game *game, t_data *img, t_data *img_map);
 void	open_west(t_game *game, t_data *img, t_data *img_map);
 void	open_north(t_game *game, t_data *img, t_data *img_map);
 void	open_south(t_game *game, t_data *img, t_data *img_map);
-void	go_up(t_game *game, t_data *img, t_data *img_map);
-void	go_right(t_game *game, t_data *img, t_data *img_map);
-void	go_left(t_game *game, t_data *img, t_data *img_map);
-void	go_down(t_game *game, t_data *img, t_data *img_map);
-void	look_left(t_game *game, t_data *img);
-void	look_right(t_game *game, t_data *img);
 void	orientation(t_game *game, t_data *img, t_data *img_map);
-int		mouse_moove(int mouse_x, int mouse_y, void *gm);
 int		code_moove(int keycode, void *gm);
+int		mouse_moove(int mouse_x, int mouse_y, void *gm);
 
 /**********xmini_map**********/
 
-void	gray_screen(t_data *img, int width, int length);
-void	aff_screen(t_game *game, t_data *img, int code, int size);
-void	go_wall(int x, int y, t_data *img, int code);
 void	put_map(t_game *game, t_data *img);
 void	put_player(t_game *game, t_data *img);
+void	go_wall(int x, int y, t_data *img, int code);
+void	gray_screen(t_data *img, int width, int length);
 void	go_player(t_game *game, int x, int y, t_data *img);
+void	aff_screen(t_game *game, t_data *img, int code, int size);
 
 /*************image*************/
 
@@ -154,10 +159,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int colors);
 
 /**********free_value**********/
 
-void	free_graphics(t_game *game);
 void	free_tab(char **tab);
 void	free_xpm(int **tab, int x);
 void	free_tmp_value(t_tmp *tmp);
+void	free_graphics(t_game *game);
 
 /**********raycasting**********/
 
@@ -167,11 +172,10 @@ void	do_ray(t_game *game, t_data *img);
 /*************utils*************/
 
 size_t	ft_strlen(char *str);
+char	**st_split(char *s, char c);
+char	**ft_split(char *s, char c);
 char	*ft_strchr(char *str, int c);
 char	*ft_strjoin(char *s1, char *s2);
 char	*word_dup(char *str, int start, int finish);
-char	**st_split(char *s, char c);
-char	**ft_split(char *s, char c);
-char	*get_flat(int map);
 
 #endif

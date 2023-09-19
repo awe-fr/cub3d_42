@@ -23,7 +23,7 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS)
 				$(MLX_COMPILE)
-				$(CC) $(SRCS) $(MLX) $(CFLAGS_MLX) $(NAME) -g
+				$(CC) $(SRCS) $(MLX) $(CFLAGS_MLX) $(NAME) -g -O3
 				
 clean:
 			$(RM) $(OBJS)

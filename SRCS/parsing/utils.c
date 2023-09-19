@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srajaoui <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/19 19:22:33 by srajaoui          #+#    #+#             */
+/*   Updated: 2023/09/19 19:22:35 by srajaoui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_header.h"
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -51,10 +63,10 @@ size_t	ft_strlen(char *str)
 	return (i);
 }
 
-int atoi_hexa(char *str)
+int	atoi_hexa(char *str)
 {
-	int result;
-	int i;
+	int	result;
+	int	i;
 
 	result = 0;
 	i = 0;
@@ -71,26 +83,25 @@ int atoi_hexa(char *str)
 
 int	get_color(t_xpm *xpm, char **xpm_char, int x, int y)
 {
-	char val;
-	int i;
-	int z;
-	int result;
-	char *color;
-	int k;
+	char	*color;
+	char	val;
+	int		i;
+	int		result;
+	int		k;
 
 	i = 0;
-	z = 4;
 	k = 0;
 	val = xpm_char[y][x];
 	color = malloc(sizeof(char) * 7);
 	while ((xpm->colors[i][0] != val) && (xpm->colors[i] != NULL))
 		i++;
-	while (xpm->colors[i][z] != 0)
+	while (xpm->colors[i][k + 4] != 0)
 	{
-		color[k++] = xpm->colors[i][z++];
+		color[k] = xpm->colors[i][k + 4];
+		k++;
 	}
 	color[k] = '\0';
 	result = atoi_hexa(color);
 	free(color);
-	return result;
+	return (result);
 }

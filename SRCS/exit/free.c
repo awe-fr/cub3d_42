@@ -56,3 +56,11 @@ void	free_graphics(t_game *game)
 	free_xpm(game->screen, SCREEN_LENGTH);
 	exit (0);
 }
+
+void	free_tmp_value(t_tmp *tmp)
+{
+	free_tab(tmp->north_xpm);
+	free_tab(tmp->south_xpm);
+	free_tab(tmp->east_xpm);
+	free_tab(tmp->west_xpm);
+}
