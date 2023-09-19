@@ -152,15 +152,15 @@ void	do_ray(t_game *game, t_data *img)
 		if (ca > 2 * PI)
 			ca-= 2 * PI;
 		disT = disT * cos(ca);
-		if (r == SCREEN_WIDTH / 2)
-		{
-		//	printf("%d\n", were + game->west.width - (were*2) - 1);
-			// game->next_wall = disT / 64;
-			// printf("%f, %f, %d\n", were_f, game->p_x + cos(ra) * disT/64, (int)(game->p_x + cos(ra) * disT/64));
-		}
+		// if (r == SCREEN_WIDTH / 2)
+		// {
+		// 	printf("%d\n", weren);
+		// 	// game->next_wall = disT / 64;
+		// 	// printf("%f, %f, %d\n", were_f, game->p_x + cos(ra) * disT/64, (int)(game->p_x + cos(ra) * disT/64));
+		// }
 		lineH = (game->map.unit * SCREEN_LENGTH) / disT;
-		lineH = lineH / 2;
-		lineH = lineH * 2;
+		// lineH = lineH / 2;
+		// lineH = lineH * 2;
 		// if (lineH > SCREEN_LENGTH)
 		// 	lineH = SCREEN_LENGTH;
 		lineO = (SCREEN_LENGTH / 2) - lineH / 2;
@@ -175,8 +175,8 @@ void	do_ray(t_game *game, t_data *img)
 		}
 		while (z < lineH)
 		{
-			if (z + lineO < 0 || z + lineO > SCREEN_LENGTH)
-				z++;
+			if (z + (int)lineO < 0 || z + (int)lineO > SCREEN_LENGTH - 1)
+				z = z;
 			else if ((werew + game->west.width - (werew*2) - 1) >= 0 && (werew + game->west.width - (werew*2) - 1) <=  game->west.width - 1 && ((z * game->west.width)/(int)lineH) <= game->west.width - 1 && ((z * game->west.width)/(int)lineH) >=0 && (ry == vy) && (ra >= PI / 2 && ra <= PI * 1.5))
 				game->screen[z + (int)lineO][pixel_count] = game->west.xpm[((z * game->west.width)/(int)lineH)][werew + game->west.width - (werew*2) - 1];
 			else if ((weree) >= 0 && (weree <=  game->east.width - 1) && ((z * game->east.width)/(int)lineH) <= game->east.width - 1 && ((z * game->east.width)/(int)lineH) >=0 && (ry == vy) && (ra < PI / 2 || ra > PI * 1.5))
@@ -225,25 +225,6 @@ void	tab_to_image(t_game *game, t_data *img)
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
 
-void	gray_screenv2(t_game *game)
-{
-	int x;
-	int y;
-
-	x = 0;
-	y = 0;
-	while (y <= SCREEN_LENGTH)
-	{
-		while(x <= SCREEN_WIDTH)
-		{
-			game->screen[y][x] = 9211530;
-			x++;
-		}
-		y++;
-		x = 0;
-	}
-}
-
 void	screen_alloc(t_game *game)
 {
 	int y;
@@ -263,14 +244,13 @@ void	game_start(t_game *game)
 	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bits_per_pixel, &game->img.line_length, &game->img.endian);
 	game->map.img.img = mlx_new_image(game->map.mlx, game->map.width * 16, game->map.width * 16);
 	game->map.img.addr = mlx_get_data_addr(game->map.img.img, &game->map.img.bits_per_pixel, &game->map.img.line_length, &game->map.img.endian);
-	// tab_to_image(game, &game->img);
 	gray_screen(&game->map.img, game->map.width * 16, game->map.length * 16);
 	put_map(game, &game->map.img);
 	put_player(game, &game->map.img);
-	// do_ray(game, &game->img);
-	// mlx_mouse_hide(game->mlx, game->win);
+	do_ray(game, &game->img);
+	tab_to_image(game, &game->img);
+	mlx_mouse_hide(game->mlx, game->win);
 	mlx_put_image_to_window(game->map.mlx, game->map.win, game->map.img.img, 0, 0);
-	// mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 	mlx_hook(game->win, 2, 1L << 0, code_moove, game);
 	mlx_hook(game->win, 6, 1L << 6, mouse_moove, game);
 }
