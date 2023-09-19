@@ -1,21 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srajaoui <srajaoui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/19 03:11:00 by srajaoui          #+#    #+#             */
+/*   Updated: 2023/09/19 03:11:05 by srajaoui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_header.h"
-	
+
 void	free_tab(char **tab)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while(tab[++i])
+	while (tab[++i])
 		free(tab[i]);
 	free(tab);
 }
 
 void	free_xpm(int **tab, int x)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(i < x)
+	while (i < x)
 	{
 		free(tab[i]);
 		i++;
@@ -42,7 +54,5 @@ void	free_graphics(t_game *game)
 	free_xpm(game->west.xpm, game->west.length);
 	free_tab(game->west.colors);
 	free_xpm(game->screen, SCREEN_LENGTH);
-	// free_xpm(game->door.xpm, game->door.length);
-	// free_tab(game->door.colors);
 	exit (0);
 }
