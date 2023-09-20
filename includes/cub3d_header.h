@@ -98,17 +98,17 @@ typedef	struct s_math
 		float y_offset;
 		float ray_x;
 		float ray_y;
-		float disT;
-		float disH;
-		float disV;
+		float dis_t;
+		float dis_h;
+		float dis_v;
 		float horizontal_x;
 		float vertical_x;
 		float horizontal_y;
 		float vertical_y;
-		float aTan;
-		float nTan;
-		float lineH;
-		float lineO;
+		float atan;
+		float ntan;
+		float lineh;
+		float lineo;
 		float were_f;
 		float correction_angle;
 }		t_math;
@@ -200,6 +200,19 @@ void	free_graphics(t_game *game);
 
 float	dist(float ax, float ay, float bx, float by);
 void	do_ray(t_game *game, t_data *img);
+void	print_texture_north(t_game *game, int pixel_count, int z, int gray);
+void	print_texture_south(t_game *game, int pixel_count, int z, int gray);
+void	print_texture_east(t_game *game, int pixel_count, int z, int gray);
+void	print_texture_west(t_game *game, int pixel_count, int z, int gray);
+int	print_sky(t_game *game, int pixel_count, int z, int gray);
+void	print_floor(t_game *game, int pixel_count, int z, int gray);
+int print_line(t_game *game, int pixel_count);
+void ray_x(t_game *game);
+void were_x(t_game *game);
+void ray_x_inforsup(t_game *game);
+void ray_y(t_game *game);
+void were_y(t_game *game);
+void ray_y_inforsup(t_game *game);
 
 /*************utils*************/
 

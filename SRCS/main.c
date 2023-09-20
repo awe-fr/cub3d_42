@@ -1,15 +1,5 @@
 #include "../includes/cub3d_header.h"
 
-void	go_player(t_game *game, int x, int y, t_data *img)
-{
-	game->p_x = (float)x + 0.45;
-	game->p_y = (float)y + 0.45;
-	game->p_a = PI;
-	game->p_dx = cos(game->p_a) * 5;
-	game->p_dy = sin(game->p_a) * 5;
-	aff_screen(game, img, PLAYER, 2);
-}
-
 void	do_ray(t_game *game, t_data *img)
 {
 	game->math.ray_angle = game->p_a - DR * 33;
@@ -18,159 +8,41 @@ void	do_ray(t_game *game, t_data *img)
 	if(game->math.ray_angle > 2 * PI)
 		game->math.ray_angle -= 2 * PI;
 	game->math.ray = 0;
-	int z = 0;
 	int pixel_count = 0;
-	int gray;
-	gray = 0;
 	while (game->math.ray<SCREEN_WIDTH)
 	{
-		game->math.dof = 0;
-		game->math.disH = 1000000;
-		game->math.horizontal_x = game->p_x * 64;
-		game->math.horizontal_y = game->p_y * 64;
-		game->math.aTan = -1/tan(game->math.ray_angle);
-		if (game->math.ray_angle>PI)
-		{
-			game->math.ray_y = (((int)(game->p_y * 64)>>6)<<6) -0.0001;
-			game->math.ray_x = ((game->p_y * 64) - game->math.ray_y)*game->math.aTan+(game->p_x * 64);
-			game->math.y_offset = -64;
-			game->math.x_offset = -game->math.y_offset*game->math.aTan;
-		}
-		if (game->math.ray_angle<PI)
-		{
-			game->math.ray_y = (((int)(game->p_y * 64)>>6)<<6) + 64;
-			game->math.ray_x = ((game->p_y * 64) - game->math.ray_y)*game->math.aTan+(game->p_x * 64);
-			game->math.y_offset = 64;
-			game->math.x_offset = -game->math.y_offset*game->math.aTan;
-		}
-		if(game->math.ray_angle == 0 || game->math.ray_angle == PI)
-		{
-			game->math.ray_x = (game->p_x * 64);
-			game->math.ray_y = (game->p_y * 64);
-			game->math.dof = game->map.length;
-		}
-		while (game->math.dof < game->map.length)
-		{
-			game->math.map_x = (int)(game->math.ray_x)>>6;
-			game->math.map_y = (int)(game->math.ray_y)>>6;
-			game->math.map_point = game->math.map_y * game->map.width + game->math.map_x; 
-			if ((game->math.map_point > 0 && game->math.map_point<game->map.width*game->map.length && game->map.map[game->math.map_point] == 1) || (game->math.map_point > 0 && game->math.map_point<game->map.width*game->map.length && game->map.map[game->math.map_point] == 7))
-			{
-				game->math.horizontal_x = game->math.ray_x;
-				game->math.horizontal_y = game->math.ray_y;
-				game->math.disH = dist(game->p_x * 64, game->p_y * 64, game->math.horizontal_x, game->math.horizontal_y);
-				game->math.dof = game->map.length;
-			}
-			else if ((game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 1) || (game->map.map[(int)(game->p_x + game->p_dx / game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit) * game->map.width] != 7))
-			{
-				game->math.ray_x+=game->math.x_offset;
-				game->math.ray_y+=game->math.y_offset;
-				game->math.dof+=1;
-			}
-		}
-		game->math.dof = 0;
-		game->math.disV = 1000000;
-		game->math.vertical_x = game->p_x * 64;
-		game->math.vertical_y = game->p_y * 64;
-		game->math.nTan = -tan(game->math.ray_angle);
-		if (game->math.ray_angle>P2 && game->math.ray_angle<P3)
-		{
-			game->math.ray_x = (((int)(game->p_x * 64)>>6)<<6) -0.0001;
-			game->math.ray_y = ((game->p_x * 64) - game->math.ray_x)*game->math.nTan+(game->p_y * 64);
-			game->math.x_offset = -64;
-			game->math.y_offset = -game->math.x_offset*game->math.nTan;
-		}
-		if (game->math.ray_angle<P2 || game->math.ray_angle>P3)
-		{
-			game->math.ray_x = (((int)(game->p_x * 64)>>6)<<6) + 64;
-			game->math.ray_y = ((game->p_x * 64) - game->math.ray_x)*game->math.nTan+(game->p_y * 64);
-			game->math.x_offset = 64;
-			game->math.y_offset = -game->math.x_offset*game->math.nTan;
-		}
-		if(game->math.ray_angle == 0 || game->math.ray_angle == PI)
-		{
-			game->math.ray_x = (game->p_x * 64);
-			game->math.ray_y = (game->p_y * 64);
-			game->math.dof = game->map.width;
-		}
-		while (game->math.dof < game->map.width)
-		{
-			game->math.map_x = (int)(game->math.ray_x)>>6;
-			game->math.map_y = (int)(game->math.ray_y)>>6;
-			game->math.map_point = game->math.map_y * game->map.width + game->math.map_x; 
-			if ((game->math.map_point > 0 && game->math.map_point<game->map.width*game->map.length && game->map.map[game->math.map_point] == 1) || (game->math.map_point > 0 && game->math.map_point<game->map.width*game->map.length && game->map.map[game->math.map_point] == 7))
-			{
-				game->math.vertical_x = game->math.ray_x;
-				game->math.vertical_y = game->math.ray_y;
-				game->math.disV = dist(game->p_x * 64, game->p_y * 64, game->math.vertical_x, game->math.vertical_y);
-				game->math.dof = game->map.width;
-			}
-			else
-			{
-				game->math.ray_x+=game->math.x_offset;
-				game->math.ray_y+=game->math.y_offset;
-				game->math.dof+=1;
-			}
-		}
+		ray_x(game);
+		ray_y(game);
 		game->math.ray++;
-		if(game->math.disV < game->math.disH)
+		if(game->math.dis_v < game->math.dis_h)
 		{
 			game->math.ray_x = game->math.vertical_x;
 			game->math.ray_y = game->math.vertical_y;
-			game->math.disT = game->math.disV;
+			game->math.dis_t = game->math.dis_v;
 		}
-		if(game->math.disH < game->math.disV)
+		if(game->math.dis_h < game->math.dis_v)
 		{
 			game->math.ray_x = game->math.horizontal_x;
 			game->math.ray_y = game->math.horizontal_y;
-			game->math.disT = game->math.disH;
+			game->math.dis_t = game->math.dis_h;
 		}
 		if (game->math.ray_y == game->math.vertical_y)
-			game->math.were_f = (game->p_y + sin(game->math.ray_angle) * (game->math.disT/64)) - (int)(game->p_y + sin(game->math.ray_angle) * (game->math.disT/64));
+			game->math.were_f = (game->p_y + sin(game->math.ray_angle) * (game->math.dis_t/64)) - (int)(game->p_y + sin(game->math.ray_angle) * (game->math.dis_t/64));
 		else
-			game->math.were_f = (game->p_x + cos(game->math.ray_angle) * (game->math.disT/64)) - (int)(game->p_x + cos(game->math.ray_angle) * (game->math.disT/64));
+			game->math.were_f = (game->p_x + cos(game->math.ray_angle) * (game->math.dis_t/64)) - (int)(game->p_x + cos(game->math.ray_angle) * (game->math.dis_t/64));
 		game->math.weren = (int)(game->math.were_f * game->north.width);
 		game->math.weree = (int)(game->math.were_f * game->east.width);
 		game->math.werew = (int)(game->math.were_f * game->west.width);
 		game->math.weres = (int)(game->math.were_f * game->south.width);
-
 		game->math.correction_angle = game->p_a - game->math.ray_angle;
 		if (game->math.correction_angle < 0)
 			game->math.correction_angle += 2 * PI;
 		if (game->math.correction_angle > 2 * PI)
 			game->math.correction_angle-= 2 * PI;
-		game->math.disT = game->math.disT * cos(game->math.correction_angle);
-		game->math.lineH = (game->map.unit * SCREEN_LENGTH) / game->math.disT;
-		game->math.lineO = (SCREEN_LENGTH / 2) - game->math.lineH / 2;
-		while (game->math.lineH - SCREEN_LENGTH  + (gray * 2) < 0)
-		{
-			game->screen[gray][pixel_count] = 9211530;
-			gray++;
-		}
-		while (z < game->math.lineH)
-		{
-			if (z + (int)game->math.lineO < 0 || z + (int)game->math.lineO > SCREEN_LENGTH - 1)
-				z = z;
-			else if ((game->math.werew + game->west.width - (game->math.werew*2) - 1) >= 0 && (game->math.werew + game->west.width - (game->math.werew*2) - 1) <=  game->west.width - 1 && ((z * game->west.width)/(int)game->math.lineH) <= game->west.width - 1 && ((z * game->west.width)/(int)game->math.lineH) >=0 && (game->math.ray_y == game->math.vertical_y) && (game->math.ray_angle >= P2 && game->math.ray_angle <= P3))
-				game->screen[z + (int)game->math.lineO][pixel_count] = game->west.xpm[((z * game->west.width)/(int)game->math.lineH)][game->math.werew + game->west.width - (game->math.werew*2) - 1];
-			else if ((game->math.weree) >= 0 && (game->math.weree <=  game->east.width - 1) && ((z * game->east.width)/(int)game->math.lineH) <= game->east.width - 1 && ((z * game->east.width)/(int)game->math.lineH) >=0 && (game->math.ray_y == game->math.vertical_y) && (game->math.ray_angle < P2 || game->math.ray_angle > P3))
-				game->screen[z + (int)game->math.lineO][pixel_count] = game->east.xpm[((z * game->east.width)/(int)game->math.lineH)][game->math.weree];
-			else if ((game->math.weres + game->south.width - (game->math.weres*2) - 1) >= 0 && (game->math.weres + game->south.width - (game->math.weres*2) - 1) <=  game->south.width - 1 && ((z * game->south.width)/(int)game->math.lineH) <= game->south.width - 1 && ((z * game->south.width)/(int)game->math.lineH) >=0 && (game->math.ray_y == game->math.horizontal_y) && (game->math.ray_angle < PI))
-				game->screen[z + (int)game->math.lineO][pixel_count] = game->south.xpm[((z * game->south.width)/(int)game->math.lineH)][game->math.weres + game->south.width - (game->math.weres*2) - 1];
-			else if ((game->math.weren) >= 0 && (game->math.weren <=  game->north.width - 1) && ((z * game->north.width)/(int)game->math.lineH) <= game->north.width - 1 && ((z * game->north.width)/(int)game->math.lineH) >=0 && (game->math.ray_y == game->math.horizontal_y) && (game->math.ray_angle >= PI))
-				game->screen[z + (int)game->math.lineO][pixel_count] = game->north.xpm[((z * game->north.width)/(int)game->math.lineH)][game->math.weren];
-			z++;
-			gray++;
-		}
-		gray-=2;
-		while (gray < 720)
-		{
-			game->screen[gray][pixel_count] = 9211530;
-			gray++;
-		}
-		gray = 0;
-		pixel_count++;
-		z = 0; 		
+		game->math.dis_t = game->math.dis_t * cos(game->math.correction_angle);
+		game->math.lineh = (game->map.unit * SCREEN_LENGTH) / game->math.dis_t;
+		game->math.lineo = (SCREEN_LENGTH / 2) - game->math.lineh / 2;
+		pixel_count = print_line(game, pixel_count);
 		game->math.ray_angle += DR / (SCREEN_WIDTH / 66);
 		if (game->math.ray_angle < 0)
 			game->math.ray_angle += 2 * PI;

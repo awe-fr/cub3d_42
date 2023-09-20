@@ -58,3 +58,13 @@ int	mouse_moove(int mouse_x, int mouse_y, void *gm)
 		mlx_mouse_move(game->mlx, game->win, MOUSE_X, MOUSE_Y);
 	return (0);
 }
+
+void	go_player(t_game *game, int x, int y, t_data *img)
+{
+	game->p_x = (float)x + 0.45;
+	game->p_y = (float)y + 0.45;
+	game->p_a = PI;
+	game->p_dx = cos(game->p_a) * 5;
+	game->p_dy = sin(game->p_a) * 5;
+	aff_screen(game, img, PLAYER, 2);
+}
