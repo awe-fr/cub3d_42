@@ -82,6 +82,37 @@ typedef struct s_map {
 	t_data	img;
 }		t_map;
 
+typedef	struct s_math
+{
+		int map_point;
+		int map_x;
+		int map_y;
+		int ray;
+		int dof;
+		int weren;
+		int weres;
+		int weree;
+		int werew;
+		float ray_angle;
+		float x_offset;
+		float y_offset;
+		float ray_x;
+		float ray_y;
+		float disT;
+		float disH;
+		float disV;
+		float horizontal_x;
+		float vertical_x;
+		float horizontal_y;
+		float vertical_y;
+		float aTan;
+		float nTan;
+		float lineH;
+		float lineO;
+		float were_f;
+		float correction_angle;
+}		t_math;
+
 typedef struct s_game
 {
 	void	*mlx;
@@ -100,6 +131,7 @@ typedef struct s_game
 	t_xpm	west;
 	t_map	map;
 	t_data	img;
+	t_math	math;
 }		t_game;
 
 /**********xpm_parsing**********/
