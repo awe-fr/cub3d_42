@@ -129,6 +129,12 @@ typedef struct s_game
 	t_xpm	south;
 	t_xpm	east;
 	t_xpm	west;
+	char	*path_north_xpm;
+	char	*path_south_xpm;
+	char	*path_east_xpm;
+	char	*path_west_xpm;
+	int		floor;
+	int		ceiling;
 	t_map	map;
 	t_data	img;
 	t_math	math;

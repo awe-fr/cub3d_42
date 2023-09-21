@@ -62,15 +62,155 @@ void	graphic_management(t_game *game)
 	mlx_loop(game->mlx);
 }
 
-void map_verify(t_game *game, char *path)
+void	all_info(t_game *game, char **map_brut)
 {
-	int map_brut;
-	map_brut = open("path", O_RDONLY);
-	if (map_brut == -1)
+	int i;
+	int count;
+
+	i = 0;
+	count = 0;
+	while (map_brut[i][0] != '1' && map_brut[i])
+	{
+		if (map_brut[i][0] == 'N' || map_brut[i][0] == 'S' ||
+			map_brut[i][0] == 'W' || map_brut[i][0] == 'E' ||
+			map_brut[i][0] == 'C' || map_brut[i][0] == 'F')
+			count += 1;
+		i++;
+	}
+	if (count != 6)
+	{
+		printf("Error\nWrong map info");
+		free_tab(map_brut);
+		exit(0);
+	}
+}
+
+char	*put_path(t_game *game, char *path_brut)
+{
+	int i;
+	int y;
+	char *path;
+
+	i = 0;
+	y = 0;
+	path = malloc(sizeof(char) * ft_strlen(path_brut) + 1);
+	while(path_brut[i] != '.')
+		i++;
+	while(path_brut[i])
+	{
+		path[y] = path_brut[i];
+		y++;
+		i++;
+	}
+	path[y] = '\0';
+	return (path);
+}
+
+void	get_texture(t_game *game, char **map_brut)
+{
+	int i;
+	int init;
+
+	i = 0;
+	init = 0;
+	while (map_brut[i][0] != 'N' && map_brut[i][0] != 'S' &&
+			map_brut[i][0] != 'W' && map_brut[i][0] != 'E')
+		i++;
+	while(init != 4)
+	{
+		if (map_brut[i][0] == 'N')
+			game->path_north_xpm = put_path(game, map_brut[i]);
+		if (map_brut[i][0] == 'S')
+			game->path_south_xpm = put_path(game, map_brut[i]);
+		if (map_brut[i][0] == 'W')
+			game->path_east_xpm = put_path(game, map_brut[i]);
+		if (map_brut[i][0] == 'E')
+			game->path_west_xpm = put_path(game, map_brut[i]);
+		i++;
+		init++;
+	}
+}
+
+int	ft_atoi(char *str, int i)
+{
+	int result;
+
+	result = 0;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - 48);
+		i++;
+	}
+	return (result);
+}
+
+int    rgb_to_hex(int r, int g, int b)
+{
+    return (((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff));
+}
+
+int	get_hexa(t_game *game, char *number)
+{
+	int i;
+	int r;
+	int g;
+	int b;
+	int result;
+
+	i = 0;
+	while (!(number[i] >= '0' && number[i] <= '9'))
+		i++;
+	r = ft_atoi(number, i);
+	while(number[i] >= '0' && number[i] <= '9')
+		i++;
+	while (!(number[i] >= '0' && number[i] <= '9'))
+		i++;
+	g = ft_atoi(number, i);
+	while(number[i] >= '0' && number[i] <= '9')
+		i++;
+	while (!(number[i] >= '0' && number[i] <= '9'))
+		i++;
+	b = ft_atoi(number, i);
+	result = rgb_to_hex(r, g, b);
+	return (result);
+}
+
+void	get_backgroud(t_game *game, char **map_brut)
+{
+	int i;
+	int init;
+
+	i = 0;
+	init = 0;
+	while (map_brut[i][0] != 'F' && map_brut[i][0] != 'C')
+		i++;
+	while (init != 2)
+	{
+		if (map_brut[i][0] == 'F')
+			game->floor = get_hexa(game, map_brut[i]);
+		if (map_brut[i][0] == 'C')
+			game->ceiling = get_hexa(game, map_brut[i]);
+		i++;
+		init++;
+	}
+
+}
+
+void	map_verify(t_game *game, char *path)
+{
+	int map_file;
+	char **map_brut;
+	map_file = open(path, O_RDONLY);
+	if (map_file == -1)
 	{
 		printf("Error \nWrong map path\n");
 		exit(0);
 	}
+	map_brut = ft_image_to_char(map_file);
+	map_file = close(map_file);
+	all_info(game, map_brut);
+	get_texture(game, map_brut);
+	get_backgroud(game, map_brut);
 }
 
 int	main(int ac, char **av)

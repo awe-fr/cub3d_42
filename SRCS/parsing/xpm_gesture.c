@@ -12,18 +12,18 @@
 
 #include "../../includes/cub3d_header.h"
 
-void	pars_open(t_tmp *tmp)
+void	pars_open(t_tmp *tmp, t_game *game)
 {
-	tmp->northtxt = open("./textures/wall2.xpm", O_RDONLY);
+	tmp->northtxt = open(game->path_north_xpm, O_RDONLY);
 	if (tmp->northtxt == -1)
 		printf("Error \nWrong north texture path\n");
-	tmp->southtxt = open("./textures/wall.xpm", O_RDONLY);
+	tmp->southtxt = open(game->path_south_xpm, O_RDONLY);
 	if (tmp->southtxt == -1)
 		printf("Error \nWrong south texture path\n");
-	tmp->easttxt = open("./textures/wall.xpm", O_RDONLY);
+	tmp->easttxt = open(game->path_east_xpm, O_RDONLY);
 	if (tmp->easttxt == -1)
 		printf("Error \nWrong east texture path\n");
-	tmp->westtxt = open("./textures/wall.xpm", O_RDONLY);
+	tmp->westtxt = open(game->path_west_xpm, O_RDONLY);
 	if (tmp->westtxt == -1)
 		printf("Error \nWrong west texture path\n");
 	if (tmp->northtxt == -1 || tmp->southtxt == -1
@@ -93,7 +93,12 @@ void	init_assign(t_game *game)
 {
 	t_tmp	tmp;
 
-	pars_open(&tmp);
+	pars_open(&tmp, game);
+	//printf("%s\n", game->path_north_xpm);
+	free(game->path_north_xpm);
+	free(game->path_south_xpm);
+	free(game->path_east_xpm);
+	free(game->path_west_xpm);
 	tmp.north_xpm = ft_image_to_char(tmp.northtxt);
 	tmp.south_xpm = ft_image_to_char(tmp.southtxt);
 	tmp.east_xpm = ft_image_to_char(tmp.easttxt);

@@ -17,7 +17,7 @@ int	print_sky(t_game *game, int pixel_count, int z, int gray)
 	gray = 0;
 	while (game->math.lineh - SCREEN_LENGTH + (gray * 2) < 0)
 	{
-		game->screen[gray][pixel_count] = 9211530;
+		game->screen[gray][pixel_count] = game->ceiling;
 		gray++;
 	}
 	return (gray);
@@ -28,7 +28,7 @@ void	print_floor(t_game *game, int pixel_count, int z, int gray)
 	gray -= 2;
 	while (gray < 720)
 	{
-		game->screen[gray][pixel_count] = 9211530;
+		game->screen[gray][pixel_count] = game->floor;
 		gray++;
 	}
 }
