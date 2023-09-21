@@ -1,21 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srajaoui <srajaoui@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/21 00:47:15 by srajaoui          #+#    #+#             */
+/*   Updated: 2023/09/21 00:47:22 by srajaoui         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/cub3d_header.h"
 
-void my_mlx_pixel_put(t_data *data, int x, int y, int colors)
+void	my_mlx_pixel_put(t_data *data, int x, int y, int colors)
 {
-	char *dest;
+	char	*dest;
 
-	dest = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dest = colors;
+	dest = data->addr + (y * data->line_length + x
+			* (data->bits_per_pixel / 8));
+	*(unsigned int *)dest = colors;
 }
 
 float	dist(float ax, float ay, float bx, float by)
 {
-	return (sqrt(((bx-ax) * (bx-ax)) + ((by-ay) * (by-ay))));
+	return (sqrt(((bx - ax) * (bx - ax)) + ((by - ay) * (by - ay))));
 }
 
 int	code_moove(int keycode, void *gm)
 {
-	t_game *game;
+	t_game	*game;
 
 	game = (t_game *)gm;
 	if (keycode == 119)
@@ -39,7 +52,7 @@ int	code_moove(int keycode, void *gm)
 
 int	mouse_moove(int mouse_x, int mouse_y, void *gm)
 {
-	t_game *game;
+	t_game	*game;
 
 	game = (t_game *)gm;
 	if (mouse_y >= MOUSE_Y + 100)
@@ -51,7 +64,7 @@ int	mouse_moove(int mouse_x, int mouse_y, void *gm)
 	}
 	else if (mouse_x <= MOUSE_X -100)
 	{
-		mlx_mouse_move(game->mlx, game->win, MOUSE_X, MOUSE_Y);	
+		mlx_mouse_move(game->mlx, game->win, MOUSE_X, MOUSE_Y);
 		look_left(game, &game->img);
 	}
 	else if (mouse_y <= MOUSE_Y - 100)
@@ -63,7 +76,7 @@ void	go_player(t_game *game, int x, int y, t_data *img)
 {
 	game->p_x = (float)x + 0.45;
 	game->p_y = (float)y + 0.45;
-	game->p_a = PI;
+	game->p_a = P2;
 	game->p_dx = cos(game->p_a) * 5;
 	game->p_dy = sin(game->p_a) * 5;
 	aff_screen(game, img, PLAYER, 2);

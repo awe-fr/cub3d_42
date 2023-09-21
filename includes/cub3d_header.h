@@ -82,35 +82,35 @@ typedef struct s_map {
 	t_data	img;
 }		t_map;
 
-typedef	struct s_math
+typedef struct s_math
 {
-		int map_point;
-		int map_x;
-		int map_y;
-		int ray;
-		int dof;
-		int weren;
-		int weres;
-		int weree;
-		int werew;
-		float ray_angle;
-		float x_offset;
-		float y_offset;
-		float ray_x;
-		float ray_y;
-		float dis_t;
-		float dis_h;
-		float dis_v;
-		float horizontal_x;
-		float vertical_x;
-		float horizontal_y;
-		float vertical_y;
-		float atan;
-		float ntan;
-		float lineh;
-		float lineo;
-		float were_f;
-		float correction_angle;
+	int		map_point;
+	int		map_x;
+	int		map_y;
+	int		ray;
+	int		dof;
+	int		weren;
+	int		weres;
+	int		weree;
+	int		werew;
+	float	ray_angle;
+	float	x_offset;
+	float	y_offset;
+	float	ray_x;
+	float	ray_y;
+	float	dis_t;
+	float	dis_h;
+	float	dis_v;
+	float	horizontal_x;
+	float	vertical_x;
+	float	horizontal_y;
+	float	vertical_y;
+	float	atan;
+	float	ntan;
+	float	lineh;
+	float	lineo;
+	float	were_f;
+	float	correction_angle;
 }		t_math;
 
 typedef struct s_game
@@ -199,20 +199,24 @@ void	free_graphics(t_game *game);
 /**********raycasting**********/
 
 float	dist(float ax, float ay, float bx, float by);
+void	ray_x(t_game *game);
+void	ray_y(t_game *game);
+void	were_x(t_game *game);
+void	were_y(t_game *game);
+void	set_angle(t_game *game);
+void	ray_x_inforsup(t_game *game);
+void	ray_y_inforsup(t_game *game);
+void	were_put_pixel(t_game *game);
+void	wich_is_bigger(t_game *game);
+void	angle_correction(t_game *game);
 void	do_ray(t_game *game, t_data *img);
-void	print_texture_north(t_game *game, int pixel_count, int z, int gray);
-void	print_texture_south(t_game *game, int pixel_count, int z, int gray);
+void	print_floor(t_game *game, int pixel_count, int z, int gray);
 void	print_texture_east(t_game *game, int pixel_count, int z, int gray);
 void	print_texture_west(t_game *game, int pixel_count, int z, int gray);
-int	print_sky(t_game *game, int pixel_count, int z, int gray);
-void	print_floor(t_game *game, int pixel_count, int z, int gray);
-int print_line(t_game *game, int pixel_count);
-void ray_x(t_game *game);
-void were_x(t_game *game);
-void ray_x_inforsup(t_game *game);
-void ray_y(t_game *game);
-void were_y(t_game *game);
-void ray_y_inforsup(t_game *game);
+void	print_texture_north(t_game *game, int pixel_count, int z, int gray);
+void	print_texture_south(t_game *game, int pixel_count, int z, int gray);
+int		print_line(t_game *game, int pixel_count);
+int		print_sky(t_game *game, int pixel_count, int z, int gray);
 
 /*************utils*************/
 

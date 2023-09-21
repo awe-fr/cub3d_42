@@ -54,3 +54,39 @@ int	print_line(t_game *game, int pixel_count)
 	pixel_count++;
 	return (pixel_count);
 }
+
+void	were_put_pixel(t_game *game)
+{
+	if (game->math.ray_y == game->math.vertical_y)
+		game->math.were_f = (game->p_y + sin(game->math.ray_angle)
+				* (game->math.dis_t / 64)) - (int)(game->p_y
+				+ sin(game->math.ray_angle) * (game->math.dis_t / 64));
+	else
+		game->math.were_f = (game->p_x + cos(game->math.ray_angle)
+				* (game->math.dis_t / 64)) - (int)(game->p_x
+				+ cos(game->math.ray_angle) * (game->math.dis_t / 64));
+	game->math.weren = (int)(game->math.were_f * game->north.width);
+	game->math.weree = (int)(game->math.were_f * game->east.width);
+	game->math.werew = (int)(game->math.were_f * game->west.width);
+	game->math.weres = (int)(game->math.were_f * game->south.width);
+}
+
+void	tab_to_image(t_game *game, t_data *img)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (y < SCREEN_LENGTH)
+	{
+		while (x < SCREEN_WIDTH)
+		{
+			my_mlx_pixel_put(img, x, y, game->screen[y][x]);
+			x++;
+		}
+		y++;
+		x = 0;
+	}
+	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
+}

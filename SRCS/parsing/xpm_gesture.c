@@ -16,16 +16,16 @@ void	pars_open(t_tmp *tmp)
 {
 	tmp->northtxt = open("./textures/wall2.xpm", O_RDONLY);
 	if (tmp->northtxt == -1)
-		printf("Wrong north texture path\n");
+		printf("Error \nWrong north texture path\n");
 	tmp->southtxt = open("./textures/wall.xpm", O_RDONLY);
 	if (tmp->southtxt == -1)
-		printf("Wrong south texture path\n");
+		printf("Error \nWrong south texture path\n");
 	tmp->easttxt = open("./textures/wall.xpm", O_RDONLY);
 	if (tmp->easttxt == -1)
-		printf("Wrong east texture path\n");
+		printf("Error \nWrong east texture path\n");
 	tmp->westtxt = open("./textures/wall.xpm", O_RDONLY);
 	if (tmp->westtxt == -1)
-		printf("Wrong west texture path\n");
+		printf("Error \nWrong west texture path\n");
 	if (tmp->northtxt == -1 || tmp->southtxt == -1
 		|| tmp->easttxt == -1 || tmp->westtxt == -1)
 	{
@@ -40,13 +40,13 @@ void	pars_open(t_tmp *tmp)
 void	check_color(t_tmp *tmp)
 {
 	if (tmp->north.charactere_per_color > 1)
-		printf("North texture to much colorfull\n");
+		printf("Error \nNorth texture to much colorfull\n");
 	if (tmp->south.charactere_per_color > 1)
-		printf("South texture to much colorfull\n");
+		printf("Error \nSouth texture to much colorfull\n");
 	if (tmp->east.charactere_per_color > 1)
-		printf("East texture to much colorfull\n");
+		printf("Error \nEast texture to much colorfull\n");
 	if (tmp->west.charactere_per_color > 1)
-		printf("West texture to much colorfull\n");
+		printf("Error \nWest texture to much colorfull\n");
 	if (tmp->north.charactere_per_color > 1
 		|| tmp->south.charactere_per_color > 1
 		|| tmp->east.charactere_per_color > 1
@@ -60,13 +60,13 @@ void	check_color(t_tmp *tmp)
 void	check_square(t_tmp *tmp)
 {
 	if (tmp->north.width != tmp->north.length)
-		printf("North texture is not a square\n");
+		printf("Error \nNorth texture is not a square\n");
 	if (tmp->south.width != tmp->south.length)
-		printf("South texture is not a square\n");
+		printf("Error \nSouth texture is not a square\n");
 	if (tmp->east.width != tmp->east.length)
-		printf("East texture is not a square\n");
+		printf("Error \nEast texture is not a square\n");
 	if (tmp->west.width != tmp->west.length)
-		printf("West texture is not a square\n");
+		printf("Error \nWest texture is not a square\n");
 	if ((tmp->north.width != tmp->north.length)
 		|| (tmp->south.width != tmp->south.length)
 		|| (tmp->east.width != tmp->east.length)
