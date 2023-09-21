@@ -198,6 +198,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int colors);
 /**********free_value**********/
 
 void	free_tab(char **tab);
+void	free_path(t_game *game);
 void	free_xpm(int **tab, int x);
 void	free_tmp_value(t_tmp *tmp);
 void	free_graphics(t_game *game);

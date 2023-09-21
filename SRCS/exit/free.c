@@ -12,6 +12,14 @@
 
 #include "../../includes/cub3d_header.h"
 
+void	free_path(t_game *game)
+{
+	free(game->path_north_xpm);
+	free(game->path_south_xpm);
+	free(game->path_east_xpm);
+	free(game->path_west_xpm);
+}
+
 void	free_tab(char **tab)
 {
 	int	i;
