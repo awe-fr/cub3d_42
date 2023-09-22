@@ -233,25 +233,92 @@ int	were_start(t_game *game, char **map_brut)
 	exit(0);
 }
 
-int	map_length(t_game *game, char **map_brut, int start)
-{
-
-}
-
 int	map_width(t_game *game, char **map_brut, int start)
 {
+	int i;
+	int count;
 
+	i = 0;
+	count = 0;
+	while (map_brut[start])
+	{
+		while (map_brut[start][i])
+		{
+			i++;
+			if (i > count)
+				count = i;
+		}
+		i = 0;
+		start++;
+	}
+	return (count);
+}
+
+int	map_length(t_game *game, char **map_brut, int start)
+{
+	int i;
+	int count;
+	int stack;
+
+	i = 0;
+	count = 0;
+	stack = start;
+	while (map_brut[start])
+	{
+		while (map_brut[start][i])
+		{
+			i++;
+			if (map_brut[start][i] == '1')
+				count += 1;
+		}
+		if (count == 0)
+			return (start - stack);
+		count = 0;
+		i = 0;
+		start++;
+	}
+	return (start - stack);
+}
+
+char **put_char_map(char **map_brut, int start, int y, int x)
+{
+	int i;
+	int z;
+	char **map_char;
+
+	i = 0;
+	z = 0;
+	map_char = malloc(sizeof(char *) * (y + 1));
+	while (i != y)
+		map_char[i++] = malloc(sizeof(char) * (x + 1));
+	i = 0;
+	while (i != y)
+	{
+		while (z != x && map_brut[start][z])
+		{
+			map_char[i][z] = map_brut[start][z];
+			z++;
+		}
+		map_char[i][z] = '\0';
+		z = 0;
+		i++;
+		start++;
+	}
+	return (map_char);
 }
 
 void	get_map(t_game *game, char **map_brut)
 {
 	int start;
+	char **map_char;
 	int x;
 	int y;
 
 	start = were_start(game, map_brut);
 	y = map_length(game, map_brut, start);
 	x = map_width(game, map_brut, start);
+	map_char = put_char_map(map_brut, start, y, x);
+	//for(int i = 0; map_char[i]; i++){printf("%s\n", map_char[i]);}
 }
 
 void	map_verify(t_game *game, char *path)
@@ -270,6 +337,8 @@ void	map_verify(t_game *game, char *path)
 	get_texture(game, map_brut);
 	get_backgroud(game, map_brut);
 	get_map(game, map_brut);
+	
+	free_tab(map_brut);
 }
 
 int	main(int ac, char **av)
