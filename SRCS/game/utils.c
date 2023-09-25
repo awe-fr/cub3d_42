@@ -76,7 +76,6 @@ void	go_player(t_game *game, int x, int y, t_data *img)
 {
 	game->p_x = (float)x + 0.45;
 	game->p_y = (float)y + 0.45;
-	game->p_a = P2;
 	game->p_dx = cos(game->p_a) * 5;
 	game->p_dy = sin(game->p_a) * 5;
 	aff_screen(game, img, PLAYER, 2);

@@ -296,7 +296,7 @@ char **put_char_map(t_game *game, char **map_brut, int start, char **map_char)
 			if(map_brut[start + i][z] && map_brut[start + i][z] != ' ')
 				map_char[i][c++] = map_brut[start + i][z];
 			else
-				map_char[i][c++] = '0';
+				map_char[i][c++] = ' ';
 			if (map_brut[start + i][z])
 				z++;
 		}
@@ -336,6 +336,109 @@ void put_in_int(t_game *game, char **map_char)
 	game->map.map = map;
 }
 
+void map_error(t_game *game, char **map_char)
+{
+	free_tab(map_char);
+	free(game->path_east_xpm);
+	free(game->path_west_xpm);
+	free(game->path_south_xpm);
+	free(game->path_north_xpm);
+	printf("Error\nMap problem\n");
+	exit(0);
+}
+
+void check_info(t_game *game, char **map_char, int y, int x)
+{
+	if(y == 0 || x == 0 || y == game->map.length - 1
+		|| x == game->map.width - 1)
+		map_error(game, map_char);
+	if (map_char[y + 1][x] == ' ' || map_char[y + 1][x] == '\0')
+		map_error(game, map_char);
+	if (map_char[y - 1][x] == ' ' || map_char[y - 1][x] == '\0')
+		map_error(game, map_char);
+	if (map_char[y][x + 1] == ' ' || map_char[y][x + 1] == '\0')
+		map_error(game, map_char);
+	if (map_char[y][x - 1] == ' ' || map_char[y][x - 1] == '\0')
+		map_error(game, map_char);
+	if (map_char[y - 1][x] == '1' && map_char[y][x - 1] == '1'
+		&& map_char[y - 1][x - 1] != '1')
+		map_error(game, map_char);
+	if (map_char[y + 1][x] == '1' && map_char[y][x - 1] == '1'
+		&& map_char[y + 1][x - 1] != '1')
+		map_error(game, map_char);
+	if (map_char[y - 1][x] == '1' && map_char[y][x + 1] == '1'
+		&& map_char[y - 1][x + 1] != '1')
+		map_error(game, map_char);
+	if (map_char[y + 1][x] == '1' && map_char[y][x + 1] == '1'
+		&& map_char[y + 1][x + 1] != '1')
+		map_error(game, map_char);
+}
+
+void	check_map(t_game *game, char **map_char)
+{
+	int i;
+	int z;
+
+	i = 0;
+	z = 0;
+	while (i != game->map.length)
+	{
+		while(z != game->map.width)
+		{
+			if (map_char[i][z] == '0' || map_char[i][z] == '2')
+				check_info(game, map_char, i, z);
+			z++;
+		}
+		z = 0;
+		i++;	
+	}
+}
+
+int go_set_spawn(t_game *game, char **map_char, int y, int x)
+{
+	if (map_char[y][x] == 'N')
+	{
+		game->p_a = P2;
+		return (1);
+	}
+	else if (map_char[y][x] == 'S')
+	{
+		game->p_a = P3;
+		return (1);
+	}
+	else if (map_char[y][x] == 'E')
+	{
+		game->p_a = 0;
+		return (1);
+	}
+	else if (map_char[y][x] == 'W')
+	{
+		game->p_a = PI;
+		return (1);
+	}
+	else if (map_char[y][x] < '0' || map_char[y][x] > '9')
+		return (2);
+}
+
+void assign_spawn(t_game *game, char **map_char, int y, int x)
+{
+	int count;
+
+	count = 0;
+	while(map_char[++y])
+	{
+		x = 0;
+		while(map_char[y][x])
+		{
+			count += go_set_spawn(game, map_char, y, x);
+			x++;
+		}
+	}
+	printf("%d\n", count);
+	if (count != 1);
+		map_error(game, map_char);
+}
+
 void	get_map(t_game *game, char **map_brut)
 {
 	int start;
@@ -350,10 +453,12 @@ void	get_map(t_game *game, char **map_brut)
 	while (i != game->map.length)
 		map_char[i++] = malloc(sizeof(char) * (game->map.width + 1));
 	map_char = put_char_map(game, map_brut, start, map_char);
-	//for(int i = 0; map_char[i]; i++){printf("%s\n", map_char[i]);}
+	for(int i = 0; map_char[i]; i++){printf("%s\n", map_char[i]);}
+	free_tab(map_brut);
+	assign_spawn(game, map_char, -1, 0);
+	check_map(game, map_char);
 	put_in_int(game, map_char);
-	free_tab(map_char);
-	
+	free_tab(map_char);	
 }
 
 void	map_verify(t_game *game, char *path)
@@ -372,8 +477,6 @@ void	map_verify(t_game *game, char *path)
 	get_texture(game, map_brut);
 	get_backgroud(game, map_brut);
 	get_map(game, map_brut);
-	
-	free_tab(map_brut);
 }
 
 int	main(int ac, char **av)
@@ -392,29 +495,6 @@ int	main(int ac, char **av)
 	}
 	map_verify(&game, av[1]);
 	init_assign(&game);
-	// int map[] =
-	// {
-	// 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-	// 	1,0,0,0,0,0,0,1,1,0,1,0,0,1,0,1,
-	// 	1,0,2,0,0,0,0,0,1,0,1,0,0,1,0,1,
-	// 	1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
-	// 	1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
-	// 	1,0,1,0,0,0,0,0,7,0,1,0,0,1,0,1,
-	// 	1,1,1,1,1,1,1,7,1,1,1,1,1,1,1,1,
-	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,
-	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,
-	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-	// 	1,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,
-	// 	1,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,
-	// 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-	// };
-
-	// game.map.map = map;
-	// game.map.width = 16;
-	// game.map.length = 16;
 	game.map.unit = 64;
 	graphic_management(&game);
 }
