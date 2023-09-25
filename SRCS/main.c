@@ -280,45 +280,80 @@ int	map_length(t_game *game, char **map_brut, int start)
 	return (start - stack);
 }
 
-char **put_char_map(char **map_brut, int start, int y, int x)
+char **put_char_map(t_game *game, char **map_brut, int start, char **map_char)
 {
 	int i;
 	int z;
-	char **map_char;
+	int c;
+
+	i = -1;
+	while (++i != game->map.length)
+	{
+		c = 0;
+		z = 0;
+		while (c != game->map.width)
+		{
+			if(map_brut[start + i][z] && map_brut[start + i][z] != ' ')
+				map_char[i][c++] = map_brut[start + i][z];
+			else
+				map_char[i][c++] = '0';
+			if (map_brut[start + i][z])
+				z++;
+		}
+		map_char[i][c] = '\0';
+	}
+	map_char[i] = NULL;
+	return (map_char);
+}
+
+void put_in_int(t_game *game, char **map_char)
+{
+	int *map;
+	int i;
+	int z;
+	int count;
 
 	i = 0;
 	z = 0;
-	map_char = malloc(sizeof(char *) * (y + 1));
-	while (i != y)
-		map_char[i++] = malloc(sizeof(char) * (x + 1));
-	i = 0;
-	while (i != y)
+	count = 0;
+	map = malloc(sizeof(int) * (game->map.width * game->map.length));
+	while (i != game->map.length)
 	{
-		while (z != x && map_brut[start][z])
+		while (z != game->map.width)
 		{
-			map_char[i][z] = map_brut[start][z];
+			if (map_char[i][z] == 'N')
+				map[count] = 2;
+			else
+				map[count] = map_char[i][z] - 48;
 			z++;
+			//printf("%d", map[count]);
+			count++;
 		}
-		map_char[i][z] = '\0';
+		//printf("\n");
 		z = 0;
 		i++;
-		start++;
 	}
-	return (map_char);
+	game->map.map = map;
 }
 
 void	get_map(t_game *game, char **map_brut)
 {
 	int start;
 	char **map_char;
-	int x;
-	int y;
+	int i;
 
+	i = 0;
 	start = were_start(game, map_brut);
-	y = map_length(game, map_brut, start);
-	x = map_width(game, map_brut, start);
-	map_char = put_char_map(map_brut, start, y, x);
+	game->map.length = map_length(game, map_brut, start);
+	game->map.width = map_width(game, map_brut, start);
+	map_char = malloc(sizeof(char *) * (game->map.length + 1));
+	while (i != game->map.length)
+		map_char[i++] = malloc(sizeof(char) * (game->map.width + 1));
+	map_char = put_char_map(game, map_brut, start, map_char);
 	//for(int i = 0; map_char[i]; i++){printf("%s\n", map_char[i]);}
+	put_in_int(game, map_char);
+	free_tab(map_char);
+	
 }
 
 void	map_verify(t_game *game, char *path)
@@ -357,29 +392,29 @@ int	main(int ac, char **av)
 	}
 	map_verify(&game, av[1]);
 	init_assign(&game);
-	int map[] =
-	{
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-		1,0,0,0,0,0,0,1,1,0,1,0,0,1,0,1,
-		1,0,2,0,0,0,0,0,1,0,1,0,0,1,0,1,
-		1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
-		1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
-		1,0,1,0,0,0,0,0,7,0,1,0,0,1,0,1,
-		1,1,1,1,1,1,1,7,1,1,1,1,1,1,1,1,
-		1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-		1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-		1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,
-		1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,
-		1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-		1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-		1,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,
-		1,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,
-		1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-	};
+	// int map[] =
+	// {
+	// 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	// 	1,0,0,0,0,0,0,1,1,0,1,0,0,1,0,1,
+	// 	1,0,2,0,0,0,0,0,1,0,1,0,0,1,0,1,
+	// 	1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+	// 	1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+	// 	1,0,1,0,0,0,0,0,7,0,1,0,0,1,0,1,
+	// 	1,1,1,1,1,1,1,7,1,1,1,1,1,1,1,1,
+	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,
+	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,
+	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	// 	1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+	// 	1,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,
+	// 	1,0,1,0,0,0,0,0,0,0,1,0,0,1,0,1,
+	// 	1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+	// };
 
-	game.map.map = map;
-	game.map.width = 16;
-	game.map.length = 16;
+	// game.map.map = map;
+	// game.map.width = 16;
+	// game.map.length = 16;
 	game.map.unit = 64;
 	graphic_management(&game);
 }
