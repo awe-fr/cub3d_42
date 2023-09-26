@@ -62,6 +62,7 @@ void	free_graphics(t_game *game)
 	free_xpm(game->west.xpm, game->west.length);
 	free_tab(game->west.colors);
 	free_xpm(game->screen, SCREEN_LENGTH);
+	free(game->map.map);
 	exit (0);
 }
 

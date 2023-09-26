@@ -398,26 +398,31 @@ int go_set_spawn(t_game *game, char **map_char, int y, int x)
 {
 	if (map_char[y][x] == 'N')
 	{
-		game->p_a = P2;
+		map_char[y][x] = '2';
+		game->p_a = P3;
 		return (1);
 	}
 	else if (map_char[y][x] == 'S')
 	{
-		game->p_a = P3;
+		map_char[y][x] = '2';
+		game->p_a = P2;
 		return (1);
 	}
 	else if (map_char[y][x] == 'E')
 	{
+		map_char[y][x] = '2';
 		game->p_a = 0;
 		return (1);
 	}
 	else if (map_char[y][x] == 'W')
 	{
+		map_char[y][x] = '2';
 		game->p_a = PI;
 		return (1);
 	}
-	else if (map_char[y][x] < '0' || map_char[y][x] > '9')
+	else if ((map_char[y][x] < '0' || map_char[y][x] > '9') && map_char[y][x] != ' ')
 		return (2);
+	return (0);
 }
 
 void assign_spawn(t_game *game, char **map_char, int y, int x)
@@ -435,7 +440,7 @@ void assign_spawn(t_game *game, char **map_char, int y, int x)
 		}
 	}
 	printf("%d\n", count);
-	if (count != 1);
+	if (count != 1)
 		map_error(game, map_char);
 }
 
