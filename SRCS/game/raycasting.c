@@ -12,7 +12,7 @@
 
 #include "../../includes/cub3d_header.h"
 
-void	do_ray(t_game *game, t_data *img)
+void	do_ray(t_game *game)
 {
 	int	pixel_count;
 

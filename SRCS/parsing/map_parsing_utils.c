@@ -12,7 +12,7 @@
 
 #include "../../includes/cub3d_header.h"
 
-char	*put_path(t_game *game, char *path_brut)
+char	*put_path(char *path_brut)
 {
 	int		i;
 	int		y;
@@ -33,7 +33,7 @@ char	*put_path(t_game *game, char *path_brut)
 	return (path);
 }
 
-int	get_hexa(t_game *game, char *number)
+int	get_hexa(char *number)
 {
 	int	i;
 	int	r;

@@ -39,7 +39,7 @@ void	game_start(t_game *game)
 	gray_screen(&game->map.img, game->map.width * 16, game->map.length * 16);
 	put_map(game, &game->map.img);
 	put_player(game, &game->map.img);
-	do_ray(game, &game->img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_mouse_hide(game->mlx, game->win);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,

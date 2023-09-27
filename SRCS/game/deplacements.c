@@ -28,7 +28,7 @@ void	go_up(t_game *game, t_data *img, t_data *img_map)
 	else
 		return ;
 	aff_screen(game, img_map, PLAYER, 2);
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,
 		game->map.img.img, 0, 0);
@@ -50,7 +50,7 @@ void	go_down(t_game *game, t_data *img, t_data *img_map)
 	else
 		return ;
 	aff_screen(game, img_map, PLAYER, 2);
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,
 		game->map.img.img, 0, 0);
@@ -72,7 +72,7 @@ void	go_right(t_game *game, t_data *img, t_data *img_map)
 	else
 		return ;
 	aff_screen(game, img_map, PLAYER, 2);
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,
 		game->map.img.img, 0, 0);
@@ -94,7 +94,7 @@ void	go_left(t_game *game, t_data *img, t_data *img_map)
 	else
 		return ;
 	aff_screen(game, img_map, PLAYER, 2);
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,
 		game->map.img.img, 0, 0);

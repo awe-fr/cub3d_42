@@ -11,7 +11,7 @@ OBJS = $(SRCS:.c=.o)
 CC = gcc
 
 CFLAGS_MLX = -lXext -lX11 -lm -o
-CFLAGS =
+CFLAGS = -Wall -Werror -Wextra
 RM = rm -f
 
 MLX_PATH  = includes/minilibx-linux/

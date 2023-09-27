@@ -19,7 +19,7 @@ void	look_left(t_game *game, t_data *img)
 		game->p_a += 2 * PI;
 	game->p_dx = cos(game->p_a) * 5;
 	game->p_dy = sin(game->p_a) * 5;
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 }
 
@@ -30,7 +30,7 @@ void	look_right(t_game *game, t_data *img)
 		game->p_a -= 2 * PI;
 	game->p_dx = cos(game->p_a) * 5;
 	game->p_dy = sin(game->p_a) * 5;
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 }
 

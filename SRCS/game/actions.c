@@ -26,7 +26,7 @@ void	open_south(t_game *game, t_data *img, t_data *img_map)
 				* game->map.width)] = 7;
 	put_map(game, img_map);
 	aff_screen(game, img_map, PLAYER, 2);
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,
 		game->map.img.img, 0, 0);
@@ -46,7 +46,7 @@ void	open_north(t_game *game, t_data *img, t_data *img_map)
 				* game->map.width)] = 7;
 	put_map(game, img_map);
 	aff_screen(game, img_map, PLAYER, 2);
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,
 		game->map.img.img, 0, 0);
@@ -66,7 +66,7 @@ void	open_west(t_game *game, t_data *img, t_data *img_map)
 				* game->map.width)] = 7;
 	put_map(game, img_map);
 	aff_screen(game, img_map, PLAYER, 2);
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,
 		game->map.img.img, 0, 0);
@@ -86,7 +86,7 @@ void	open_east(t_game *game, t_data *img, t_data *img_map)
 				* game->map.width)] = 7;
 	put_map(game, img_map);
 	aff_screen(game, img_map, PLAYER, 2);
-	do_ray(game, img);
+	do_ray(game);
 	tab_to_image(game, &game->img);
 	mlx_put_image_to_window(game->map.mlx, game->map.win,
 		game->map.img.img, 0, 0);

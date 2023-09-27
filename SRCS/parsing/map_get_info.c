@@ -25,13 +25,13 @@ void	get_texture(t_game *game, char **map_brut)
 	while (init != 4)
 	{
 		if (map_brut[i][0] == 'N')
-			game->path_north_xpm = put_path(game, map_brut[i]);
+			game->path_north_xpm = put_path(map_brut[i]);
 		if (map_brut[i][0] == 'S')
-			game->path_south_xpm = put_path(game, map_brut[i]);
+			game->path_south_xpm = put_path(map_brut[i]);
 		if (map_brut[i][0] == 'W')
-			game->path_east_xpm = put_path(game, map_brut[i]);
+			game->path_east_xpm = put_path(map_brut[i]);
 		if (map_brut[i][0] == 'E')
-			game->path_west_xpm = put_path(game, map_brut[i]);
+			game->path_west_xpm = put_path(map_brut[i]);
 		i++;
 		init++;
 	}
@@ -51,9 +51,9 @@ void	get_backgroud(t_game *game, char **map_brut)
 	while (init != 2)
 	{
 		if (map_brut[i][0] == 'F')
-			game->floor = get_hexa(game, map_brut[i++]);
+			game->floor = get_hexa(map_brut[i++]);
 		if (map_brut[i][0] == 'C')
-			game->ceiling = get_hexa(game, map_brut[i++]);
+			game->ceiling = get_hexa(map_brut[i++]);
 		if (game->ceiling == -1 || game->floor == -1)
 		{
 			printf("Error\nWrong color\n");

@@ -161,7 +161,7 @@ int		get_color(t_xpm *xpm, char **xpm_char, int x, int y);
 
 /**********map_parsing**********/
 
-char	*put_path(t_game *game, char *path_brut);
+char	*put_path(char *path_brut);
 char	**put_char_map(t_game *game, char **map_brut, int start \
 	, char **map_char);
 void	map_verify(t_game *game, char *path);
@@ -174,14 +174,14 @@ void	put_in_int(t_game *game, char **map_char);
 void	get_texture(t_game *game, char **map_brut);
 void	get_backgroud(t_game *game, char **map_brut);
 void	check_info(t_game *game, char **map_char, int y, int x);
+void	assign_spawn(t_game *game, char **map_char, int y, int x);
+int		get_hexa(char *number);
 int		ft_atoi(char *str, int i);
 int		rgb_to_hex(int r, int g, int b);
-int		get_hexa(t_game *game, char *number);
 int		were_start(t_game *game, char **map_brut);
 int		map_width(t_game *game, char **map_brut, int start);
 int		map_length(t_game *game, char **map_brut, int start);
 int		go_set_spawn(t_game *game, char **map_char, int y, int x);
-void	assign_spawn(t_game *game, char **map_char, int y, int x);
 int		go_set_spawn_sup(t_game *game, char **map_char, int y, int x);
 
 /********game_essential********/
@@ -237,13 +237,13 @@ void	ray_x(t_game *game);
 void	ray_y(t_game *game);
 void	were_x(t_game *game);
 void	were_y(t_game *game);
+void	do_ray(t_game *game);
 void	set_angle(t_game *game);
 void	ray_x_inforsup(t_game *game);
 void	ray_y_inforsup(t_game *game);
 void	were_put_pixel(t_game *game);
 void	wich_is_bigger(t_game *game);
 void	angle_correction(t_game *game);
-void	do_ray(t_game *game, t_data *img);
 void	print_floor(t_game *game, int pixel_count, int z, int gray);
 void	print_texture_east(t_game *game, int pixel_count, int z, int gray);
 void	print_texture_west(t_game *game, int pixel_count, int z, int gray);
