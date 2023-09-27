@@ -29,10 +29,9 @@ void	pars_open(t_tmp *tmp, t_game *game)
 	if (tmp->northtxt == -1 || tmp->southtxt == -1
 		|| tmp->easttxt == -1 || tmp->westtxt == -1)
 	{
-		tmp->northtxt = close(tmp->northtxt);
-		tmp->southtxt = close(tmp->southtxt);
-		tmp->easttxt = close(tmp->easttxt);
-		tmp->westtxt = close(tmp->westtxt);
+		free_path(game);
+		free(game->map.map);
+		pars_close(tmp);
 		exit(0);
 	}
 }
@@ -94,7 +93,6 @@ void	init_assign(t_game *game)
 	t_tmp	tmp;
 
 	pars_open(&tmp, game);
-	//printf("%s\n", game->path_north_xpm);
 	free(game->path_north_xpm);
 	free(game->path_south_xpm);
 	free(game->path_east_xpm);
@@ -103,10 +101,7 @@ void	init_assign(t_game *game)
 	tmp.south_xpm = ft_image_to_char(tmp.southtxt);
 	tmp.east_xpm = ft_image_to_char(tmp.easttxt);
 	tmp.west_xpm = ft_image_to_char(tmp.westtxt);
-	tmp.northtxt = close(tmp.northtxt);
-	tmp.southtxt = close(tmp.southtxt);
-	tmp.easttxt = close(tmp.easttxt);
-	tmp.westtxt = close(tmp.westtxt);
+	pars_close(&tmp);
 	atoi_for_xpm(tmp.north_xpm[2], &tmp.north);
 	atoi_for_xpm(tmp.south_xpm[2], &tmp.south);
 	atoi_for_xpm(tmp.east_xpm[2], &tmp.east);

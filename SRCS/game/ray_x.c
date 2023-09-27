@@ -99,7 +99,7 @@ void	wich_is_bigger(t_game *game)
 
 void	angle_correction(t_game *game)
 {
-		game->math.correction_angle = game->p_a - game->math.ray_angle;
+	game->math.correction_angle = game->p_a - game->math.ray_angle;
 	if (game->math.correction_angle < 0)
 		game->math.correction_angle += 2 * PI;
 	if (game->math.correction_angle > 2 * PI)

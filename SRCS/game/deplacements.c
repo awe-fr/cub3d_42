@@ -21,7 +21,7 @@ void	go_up(t_game *game, t_data *img, t_data *img_map)
 			!= 1) && (game->map.map[(int)(game->p_x + game->p_dx
 			/ game->map.unit) + (int)(game->p_y + game->p_dy / game->map.unit)
 			* game->map.width] != 7))
-	{	
+	{
 		game->p_x += game->p_dx / game->map.unit;
 		game->p_y += game->p_dy / game->map.unit;
 	}
@@ -65,7 +65,7 @@ void	go_right(t_game *game, t_data *img, t_data *img_map)
 			!= 1) && (game->map.map[(int)(game->p_x - game->p_dy
 			/ game->map.unit) + (int)(game->p_y + game->p_dx / game->map.unit)
 			* game->map.width] != 7))
-	{	
+	{
 		game->p_x -= game->p_dy / game->map.unit;
 		game->p_y += game->p_dx / game->map.unit;
 	}
@@ -87,7 +87,7 @@ void	go_left(t_game *game, t_data *img, t_data *img_map)
 			!= 1) && (game->map.map[(int)(game->p_x + game->p_dy
 			/ game->map.unit) + (int)(game->p_y - game->p_dx / game->map.unit)
 			* game->map.width] != 7))
-	{	
+	{
 		game->p_x += game->p_dy / game->map.unit;
 		game->p_y -= game->p_dx / game->map.unit;
 	}

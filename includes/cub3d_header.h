@@ -142,20 +142,47 @@ typedef struct s_game
 
 /**********xpm_parsing**********/
 
-char	**ft_image_to_char(int map);
 char	*get_flat(int map);
 char	*cut_line(char *buff);
+char	**ft_image_to_char(int map);
 char	*get_line(int xpm, char *buff);
+void	pars_close(t_tmp *tmp);
 void	tab_in_xpm(t_tmp *tmp);
 void	check_color(t_tmp *tmp);
 void	check_square(t_tmp *tmp);
 void	init_assign(t_game *game);
+void	pars_open(t_tmp *tmp, t_game *game);
 void	atoi_for_xpm(char *str, t_xpm *xpm);
 void	xpm_to_int(char **xpm_char, t_xpm *xpm);
 void	xpm_to_char(char **xpm_char, t_xpm *xpm);
 void	place_colors(char **xpm_info, t_xpm *xpm);
 int		atoi_hexa(char *str);
 int		get_color(t_xpm *xpm, char **xpm_char, int x, int y);
+
+/**********map_parsing**********/
+
+char	*put_path(t_game *game, char *path_brut);
+char	**put_char_map(t_game *game, char **map_brut, int start \
+	, char **map_char);
+void	map_verify(t_game *game, char *path);
+void	get_map(t_game *game, char **map_brut);
+void	all_info(t_game *game, char **map_brut);
+void	map_error(t_game *game, char **map_char);
+void	map_error(t_game *game, char **map_char);
+void	check_map(t_game *game, char **map_char);
+void	put_in_int(t_game *game, char **map_char);
+void	get_texture(t_game *game, char **map_brut);
+void	get_backgroud(t_game *game, char **map_brut);
+void	check_info(t_game *game, char **map_char, int y, int x);
+int		ft_atoi(char *str, int i);
+int		rgb_to_hex(int r, int g, int b);
+int		get_hexa(t_game *game, char *number);
+int		were_start(t_game *game, char **map_brut);
+int		map_width(t_game *game, char **map_brut, int start);
+int		map_length(t_game *game, char **map_brut, int start);
+int		go_set_spawn(t_game *game, char **map_char, int y, int x);
+void	assign_spawn(t_game *game, char **map_char, int y, int x);
+int		go_set_spawn_sup(t_game *game, char **map_char, int y, int x);
 
 /********game_essential********/
 

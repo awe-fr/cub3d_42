@@ -112,3 +112,11 @@ void	xpm_to_int(char **xpm_char, t_xpm *xpm)
 		i++;
 	}
 }
+
+void	pars_close(t_tmp *tmp)
+{
+	tmp->northtxt = close(tmp->northtxt);
+	tmp->southtxt = close(tmp->southtxt);
+	tmp->easttxt = close(tmp->easttxt);
+	tmp->westtxt = close(tmp->westtxt);
+}
